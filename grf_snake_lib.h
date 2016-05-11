@@ -5,4 +5,12 @@ typedef struct snake Snake;
 
 Snake* newSnake();
 
+void destroySnake(Snake *head);
+
+void increaseSnake(Snake *head);
+
+void decreaseSnake(Snake *head);
+
+int getSnakeSize(Snake *head);
+
 #endif
