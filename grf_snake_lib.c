@@ -9,17 +9,15 @@ struct snake{
 struct snake* newSnake(int size){
 	struct snake *head = malloc(sizeof(struct snake));
 	
-	//Para uso no laço for sem perder a referência para head
-	struct snake *node = head;
-	node->next = NULL;
-	
-	for(int i = 1; i<size; i++){
-		struct snake *newnode = malloc(sizeof(struct snake));
-		node->next = newnode;
-		node = node->next;
-		node->next = NULL;
-	}
-	
+	struct snake *tail = malloc(sizeof(struct snake));
+	head->next = tail;
+        tail->next = NULL;
+        size -= 2;
+
+        for(int i = 0; i<size; i++){
+                increaseSnake(head);
+        }
+
 	return head;
 }
 
