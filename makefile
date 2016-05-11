@@ -10,7 +10,7 @@ CC=gcc
 CFLAGS=-Wall -lm -lconio -std=c99
 SRC=$(wildcard *.c)
 OBJ=$(SRC:.c=.o)
-LIBS=
+LIBS=grf_snake_lib.h
 EXEC=snake
 
 all: $(EXEC)
