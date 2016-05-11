@@ -16,8 +16,8 @@ struct snake* newSnake(int size){
 	for(int i = 1; i<size; i++){
 		struct snake *newnode = malloc(sizeof(struct snake));
 		node->next = newnode;
-		newnode->next = NULL;
 		node = node->next;
+		node->next = NULL;
 	}
 	
 	return head;
@@ -32,8 +32,9 @@ void destroySnake(struct snake *head){
 }
 
 void increaseSnake(struct snake *head){
-	struct snake *body = malloc(sizeof(struct snake));
-	
+	struct snake *newbody = malloc(sizeof(struct snake));
+	newbody->next = head->next;
+	head->next = newbody;
 }
 
 void decreaseSnake(struct snake *head){
