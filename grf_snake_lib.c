@@ -1,18 +1,16 @@
 #include <stdlib.h>
 
-#define SNAKE_SIZE 5
-
 typedef struct snake{
 	int x;
 	int y;
 	struct snake *next;
 } Snake;
 
-Snake* newSnake(){
+Snake* newSnake(int size){
 	Snake *head = NULL;
 	Snake *node = head;
 	
-	for(int i = 0; i<SNAKE_SIZE; i++){
+	for(int i = 0; i<size; i++){
 		node = malloc(sizeof(Snake));
 		node->next = NULL;
 		node = node->next;
@@ -30,13 +28,41 @@ void destroySnake(Snake *head){
 }
 
 void increaseSnake(Snake *head){
-	//TODO
+	Snake *body = malloc(sizeof(Snake));
+	
 }
 
 void decreaseSnake(Snake *head){
-	//TODO
+	while(head->next->next != NULL){
+		head = head->next;
+	}
+	free(head->next);
+	head->next = NULL;
 }
 
 int getSnakeSize(Snake *head){
 	//TODO
+}
+
+void moveSnake(Snake *head,int dir){
+	
+	decreaseSnake(head);
+	increaseSnake(head);
+	
+	switch(dir){
+		case 0:
+			head->x++;
+			break;
+		case 90:
+			head->y--;
+			break;
+		case 180:
+			head->x--;
+			break;
+		case 270:
+			head->y++;
+			break;
+		default:
+			
+	}
 }
