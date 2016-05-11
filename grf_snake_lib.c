@@ -20,3 +20,19 @@ Snake* newSnake(){
 	
 	return head;
 }
+
+void destroySnake(Snake *head){
+	//TODO
+}
+
+void increaseSnake(Snake *head){
+	//TODO
+}
+
+void decreaseSnake(Snake *head){
+	//TODO
+}
+
+int getSnakeSize(Snake *head){
+	//TODO
+}
