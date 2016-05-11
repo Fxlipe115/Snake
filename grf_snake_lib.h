@@ -19,6 +19,6 @@ void decreaseSnake(Snake *head);
 
 int getSnakeSize(Snake *head);
 
-void moveSnake(Snake *snake,int dir);
+void moveSnake(Snake *head,int dir);
 
 #endif
