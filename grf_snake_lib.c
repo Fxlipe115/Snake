@@ -22,11 +22,11 @@ Snake* newSnake(){
 }
 
 void destroySnake(Snake *head){
-        while(head != NULL){
-            Snake *tmp = head;
-            head = head->next;
-            free(tmp);
-        }
+	while(head != NULL){
+		Snake *tmp = head;
+		head = head->next;
+		free(tmp);
+	}
 }
 
 void increaseSnake(Snake *head){
