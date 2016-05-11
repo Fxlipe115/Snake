@@ -9,9 +9,14 @@ typedef struct snake{
 } Snake;
 
 Snake* newSnake(){
-	Snake *node = malloc(sizeof(Snake));
+	Snake *head = NULL;
+	Snake *node = head;
+	
 	for(int i = 0; i<SNAKE_SIZE; i++){
-		
+		node = malloc(sizeof(Snake));
+		node->next = NULL;
+		node = node->next;
 	}
-	return node;
+	
+	return head;
 }
