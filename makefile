@@ -1,13 +1,13 @@
 ##############MAKEFILE##############
 
 #VARIABLES
-
 CC=gcc
 CFLAGS=-Wall -lm -lconio -std=c99
 SRC=$(wildcard *.c)
 OBJ=$(SRC:.c=.o)
 #LIBS=$(wildcard *.h)
 EXEC=snake
+
 
 all: $(EXEC)
 
