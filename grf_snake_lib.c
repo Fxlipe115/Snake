@@ -1,38 +1,42 @@
 #include <stdlib.h>
 
-typedef struct snake{
+struct snake{
 	int x;
 	int y;
 	struct snake *next;
-} Snake;
+};
 
-Snake* newSnake(int size){
-	Snake *head = NULL;
-	Snake *node = head;
+struct snake* newSnake(int size){
+	struct snake *head = malloc(sizeof(struct snake));
 	
-	for(int i = 0; i<size; i++){
-		node = malloc(sizeof(Snake));
-		node->next = NULL;
+	//Para uso no laço for sem perder a referência para head
+	struct snake *node = head;
+	node->next = NULL;
+	
+	for(int i = 1; i<size; i++){
+		struct snake *newnode = malloc(sizeof(struct snake));
+		node->next = newnode;
+		newnode->next = NULL;
 		node = node->next;
 	}
 	
 	return head;
 }
 
-void destroySnake(Snake *head){
+void destroySnake(struct snake *head){
 	while(head != NULL){
-		Snake *tmp = head;
+		struct snake *tmp = head;
 		head = head->next;
 		free(tmp);
 	}
 }
 
-void increaseSnake(Snake *head){
-	Snake *body = malloc(sizeof(Snake));
+void increaseSnake(struct snake *head){
+	struct snake *body = malloc(sizeof(struct snake));
 	
 }
 
-void decreaseSnake(Snake *head){
+void decreaseSnake(struct snake *head){
 	while(head->next->next != NULL){
 		head = head->next;
 	}
@@ -40,11 +44,11 @@ void decreaseSnake(Snake *head){
 	head->next = NULL;
 }
 
-int getSnakeSize(Snake *head){
+int getSnakeSize(struct snake *head){
 	//TODO
 }
 
-void moveSnake(Snake *head,int dir){
+void moveSnake(struct snake *head,int dir){
 	
 	decreaseSnake(head);
 	increaseSnake(head);
