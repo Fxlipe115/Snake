@@ -22,18 +22,15 @@
 
 #include <stdio.h>
 #include <ctype.h>
-#include <conio2.h>
+#include <conio.h>
+
+#include "grf_snake_lib.h"
 
 #define SNAKE_SIZE 5
-#define MATRIX_SIZE 50
-
-typedef struct Snake{
-	int x;
-	int y;
-} Snake;
+#define MATRIX_SIZE 10
 
 int main(){
-	Snake snake[SNAKE_SIZE];
+	Snake *snake = newSnake(SNAKE_SIZE);
 	char key;
 	
 	printf("TAMANHO DA COBRA: %d\n",SNAKE_SIZE);
@@ -41,9 +38,8 @@ int main(){
 	
 	//RECEBE AS COORDENADAS DAS PARTES DO CORPO DA COBRA
 	printf("COORDENADAS INICIAIS DA COBRA:\n");
-	for(int i = 0; i < SNAKE_SIZE; i++){
-		scanf(" %d %d",&snake[i].x,&snake[i].y);
-	}
+	
+	scanf(" %d %d",&snake->x,&snake->y);
 	
 	//DESENHA A TELA
 	for(int i = 0, size = MATRIX_SIZE+2; i<size; i++){
@@ -54,12 +50,9 @@ int main(){
 	for(int y = 0; y<MATRIX_SIZE; y++){
 		printf("#");
 		for(int x = 0; x<MATRIX_SIZE; x++){
-			if(snake[0].y == y && snake[0].x == x){
+			if(snake->y == y && snake->x == x){
 				printf("@");
-			}else if((snake[1].y == y && snake[1].x == x) ||
-					 (snake[2].y == y && snake[2].x == x) ||
-					 (snake[3].y == y && snake[3].x == x) ||
-					 (snake[4].y == y && snake[4].x == x)){
+			}else if(isSnake(snake,x,y)){
 				printf("*");
 			}else{
 				printf(" ");
@@ -84,34 +77,47 @@ int main(){
 		key = toupper(key);
 		
 		//ATUALIZA POSIÇÃO DO CORPO DA COBRA
-		if(key=='W' || key=='A' || key=='S' || key=='D'){
+		/*if(key=='W' || key=='A' || key=='S' || key=='D'){
 			for(int i = SNAKE_SIZE-1; i>0; i--){
 				snake[i].x = snake[i-1].x;
 				snake[i].y = snake[i-1].y;
 			}
-		}
+		}*/
 		
 		//ATUALIZA POSIÇÃO DA CABEÇA DA COBRA
+		int dir;
 		switch(key){
 			case 'W':
-				snake[0].y--;
+				//snake[0].y--;
+				dir = UP;
 				break;
 			case 'A':
-				snake[0].x--;
+				//snake[0].x--;
+				dir = LEFT;
 				break;
 			case 'S':
-				snake[0].y++;
+				//snake[0].y++;
+				dir = DOWN;
 				break;
 			case 'D':
-				snake[0].x++;
+				//snake[0].x++;
+				dir = RIGHT;
+				break;
+			case '+':
+				increaseSnake(snake);
+				break;
+			case '-':
+				if(getSnakeSize(snake) > 2)
+					decreaseSnake(snake);
 				break;
 			case 'X':
 				break;
 		}
+		moveSnake(snake,dir);
 		
 		if(key != 'X'){
 			
-			clrscr();
+			//clrscr();
 			//DESENHA A TELA
 			for(int i = 0, size = MATRIX_SIZE+2; i<size; i++){
 				printf("#");
@@ -121,12 +127,9 @@ int main(){
 			for(int y = 0; y<MATRIX_SIZE; y++){
 				printf("#");
 				for(int x = 0; x<MATRIX_SIZE; x++){
-					if(snake[0].y == y && snake[0].x == x){
+					if(snake->y == y && snake->x == x){
 						printf("@");
-					}else if((snake[1].y == y && snake[1].x == x) ||
-							(snake[2].y == y && snake[2].x == x) ||
-							(snake[3].y == y && snake[3].x == x) ||
-							(snake[4].y == y && snake[4].x == x)){
+					}else if(isSnake(snake,x,y)){
 						printf("*");
 					}else{
 						printf(" ");
@@ -144,6 +147,8 @@ int main(){
 		
 		
 	}while(key != 'X');
+	
+	destroySnake(snake);
 	
 	return 0;
 }

@@ -7,7 +7,11 @@
 #define LEFT 180
 #define DOWN 270
 
-typedef struct snake Snake;
+typedef struct snake{
+	int x;
+	int y;
+	struct snake *next;
+} Snake;
 
 Snake* newSnake(int size);
 
@@ -20,5 +24,7 @@ void decreaseSnake(Snake *head);
 int getSnakeSize(Snake *head);
 
 void moveSnake(Snake *head,int dir);
+
+int isSnake(Snake *head,int x,int y);
 
 #endif
