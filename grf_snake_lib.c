@@ -8,15 +8,15 @@ struct snake{
 
 struct snake* newSnake(int size){
 	struct snake *head = malloc(sizeof(struct snake));
-	
 	struct snake *tail = malloc(sizeof(struct snake));
-	head->next = tail;
-        tail->next = NULL;
-        size -= 2;
 
-        for(int i = 0; i<size; i++){
-                increaseSnake(head);
-        }
+	head->next = tail;
+	tail->next = NULL;
+	size -= 2;
+
+	for(int i = 0; i<size; i++){
+		increaseSnake(head);
+	}
 
 	return head;
 }
@@ -44,7 +44,12 @@ void decreaseSnake(struct snake *head){
 }
 
 int getSnakeSize(struct snake *head){
-	//TODO
+	int size = 0;
+	while(head != NULL){
+		head = head->next;
+		size++;
+	}
+	return size;
 }
 
 void moveSnake(struct snake *head,int dir){
