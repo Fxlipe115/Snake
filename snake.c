@@ -1,25 +1,3 @@
-/********************************************************************
-* Snake                                                                                                          *
-* Felipe de Almeida Graeff                                                                                *
-* 09-05-2016                                                                                                   *
-*                                                                                                                    *
-* Simulador de movimentação do jogo Snake.                                                   *
-* O usuário primeiro deve entrar com as coordenadas das partes do                    *
-* corpo da cobra de tamanho SNAKE_SIZE.                                                       *
-* Será desenhada uma tela quadrada de lado MATRIX_SIZE com a                      *
-* cobra na posição inicial definida e será pedido ao usuário a                              *
-* entrada de comandos para a movimentação. A tela será atualiza e                    *
-* reimpressa para cada comando enviado. Esse processo se repetirá                   *
-* até que a entrada seja o caracter 'X'.                                                              *
-*                                                                                                                    *
-* Makefile enviado junto.                                                                                  *
-* Compilação:                                                                                                 *
-*   Windows: make snakewindows                                                                     *
-*   Linux  : make snakelinux                                                                             *
-*                                                                                                                    *
-* Caso for compilar em uma IDE, usar flag -std=c99                                          *
-********************************************************************/
-
 #include <stdio.h>
 #include <ctype.h>
 #include <conio.h>
@@ -89,19 +67,19 @@ int main(){
 		switch(key){
 			case 'W':
 				//snake[0].y--;
-				dir = UP;
+				dir = _UP_;
 				break;
 			case 'A':
 				//snake[0].x--;
-				dir = LEFT;
+				dir = _LEFT_;
 				break;
 			case 'S':
 				//snake[0].y++;
-				dir = DOWN;
+				dir = _DOWN_;
 				break;
 			case 'D':
 				//snake[0].x++;
-				dir = RIGHT;
+				dir = _RIGHT_;
 				break;
 			case '+':
 				increaseSnake(snake);
@@ -113,7 +91,9 @@ int main(){
 			case 'X':
 				break;
 		}
-		moveSnake(snake,dir);
+		if(key == 'W' || key == 'A' || key == 'S' || key == 'D'){
+			moveSnake(snake,dir);
+		}
 		
 		if(key != 'X'){
 			
