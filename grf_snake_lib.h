@@ -2,10 +2,10 @@
 # define GRF_SNAKE_LIB_H
 
 //Macros de direção para a função moveSnake()
-#define RIGHT 0
-#define UP 90
-#define LEFT 180
-#define DOWN 270
+#define _RIGHT_ 0
+#define _UP_ 90
+#define _LEFT_ 180
+#define _DOWN_ 270
 
 typedef struct snake{
 	int x;
