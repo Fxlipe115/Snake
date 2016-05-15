@@ -1,11 +1,23 @@
 ##############MAKEFILE##############
 
-#VARIABLES
+#####VARIABLES#####
+#Compiler
 CC=gcc
-CFLAGS=-Wall -lm -lconio -std=c99
-SRC=$(wildcard *.c)
+
+#Flags
+CFLAGS=-Wall -std=c99
+MAINFLAGS=-lm -lconio
+
+#Source files
+SRC=src/$(wildcard *.c)
+
+#Object files
 OBJ=$(SRC:.c=.o)
-#LIBS=$(wildcard *.h)
+
+#Libraries
+INCLUDE=include/$(wildcard *.h)
+
+#Executable name
 EXEC=snake
 
 
@@ -15,7 +27,7 @@ $(EXEC): $(OBJ)
 	$(CC) -o $@ $^
 
 snake.o: snake.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+	$(CC) -o $@ -c $< $(CFLAGS) $(MAINFLAGS)
 	
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
@@ -23,4 +35,4 @@ snake.o: snake.c
 .PHONY: clean 
 
 clean:
-	@rm -rf *o
+	@rm -rf $(OBJ)
