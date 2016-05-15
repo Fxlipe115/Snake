@@ -6,7 +6,7 @@ CC=gcc
 
 #Flags
 CFLAGS=-Wall -std=c99
-MAINFLAGS=-lm -lconio
+MAINFLAGS=-lm -lconio -Iinclude
 
 #Source files
 SRC=src/$(wildcard *.c)
@@ -21,6 +21,7 @@ INCLUDE=include/$(wildcard *.h)
 EXEC=snake
 
 
+#####MAKE#####
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
