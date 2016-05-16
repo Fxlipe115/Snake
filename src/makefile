@@ -5,7 +5,7 @@
 CC=gcc -std=c99 -c
 
 #Flags
-CFLAGS=-Wall -std=c99
+CFLAGS=-Wall -std=c99 -ggdb3
 MAINFLAGS=-lm -lconio 
 
 #Source files
