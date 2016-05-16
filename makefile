@@ -2,20 +2,14 @@
 
 #####VARIABLES#####
 #Compiler
-CC=gcc
-
-#Flags
-CFLAGS=-Wall -std=c99
-MAINFLAGS=-lm -lconio -Iinclude
-
-#Source files
-SRC=src/$(wildcard *.c)
+LINKER=gcc -o
 
 #Object files
+SRC=$(wildcard src/*.c)
 OBJ=$(SRC:.c=.o)
 
 #Libraries
-INCLUDE=include/$(wildcard *.h)
+#INCLUDE=$(wildcard include/*.h)
 
 #Executable name
 EXEC=snake
@@ -25,15 +19,19 @@ EXEC=snake
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CC) -o $@ $^
+	@echo ==================
+	@echo Linking $@
+	@echo ==================
+	@echo 
+	@$(LINKER) $@ $^
+	@echo Ta tranquilo, ta linkado
+	@echo 
 
-snake.o: snake.c
-	$(CC) -o $@ -c $< $(CFLAGS) $(MAINFLAGS)
-	
-%.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+$(OBJ): $(SRC)
+	@cd src; make
 	
 .PHONY: clean 
 
 clean:
 	@rm -rf $(OBJ)
+	@echo $(OBJ) removed.

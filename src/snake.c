@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <ctype.h>
-#include <conio.h>
+//#include <conio.h>
 
-#include "grf_snake_lib.h"
+#include "../include/grf_snake_lib.h"
 
 #define SNAKE_SIZE 5
 #define MATRIX_SIZE 10
@@ -50,17 +50,9 @@ int main(){
 	printf("ENTRADA DE COMANDOS: (DIGITE 'X' PARA SAIR)\n");
 	do{
 		//INPUT DE COMANDOS
-		//scanf(" %c",&key);
-		key = getch();
+		scanf(" %c",&key);
+		//key = getch();
 		key = toupper(key);
-		
-		//ATUALIZA POSIÇÃO DO CORPO DA COBRA
-		/*if(key=='W' || key=='A' || key=='S' || key=='D'){
-			for(int i = SNAKE_SIZE-1; i>0; i--){
-				snake[i].x = snake[i-1].x;
-				snake[i].y = snake[i-1].y;
-			}
-		}*/
 		
 		//ATUALIZA POSIÇÃO DA CABEÇA DA COBRA
 		int dir;
@@ -92,6 +84,7 @@ int main(){
 				break;
 		}
 		if(key == 'W' || key == 'A' || key == 'S' || key == 'D'){
+			//ATUALIZA POSIÇÃO DO CORPO DA COBRA
 			moveSnake(snake,dir);
 		}
 		
