@@ -2,7 +2,8 @@
 #include <ctype.h>
 //#include <conio.h>
 
-#include "../include/grf_snake_lib.h"
+//#include "../include/grf_snake_lib.h"
+#include "grf_snake_lib.h"
 
 #define SNAKE_SIZE 5
 #define MATRIX_SIZE 10

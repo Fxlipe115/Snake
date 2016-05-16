@@ -6,7 +6,7 @@ CC=gcc -std=c99 -c
 
 #Flags
 CFLAGS=-Wall -std=c99 -ggdb3
-MAINFLAGS=-lm -lconio 
+MAINFLAGS=-lm -lconio -I'../include' 
 
 #Source files
 SRC=$(wildcard *.c)
@@ -15,7 +15,7 @@ SRC=$(wildcard *.c)
 OBJ=$(SRC:.c=.o)
 
 #Libraries
-INCLUDE=$(wildcard include/*.h)
+#INCLUDE=$(wildcard include/*.h)
 
 
 #####MAKE#####

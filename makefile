@@ -4,8 +4,11 @@
 #Compiler
 LINKER=gcc -o
 
+#Directories
+SRCDIR=src
+
 #Object files
-SRC=$(wildcard src/*.c)
+SRC=$(wildcard $(SRCDIR)/*.c)
 OBJ=$(SRC:.c=.o)
 
 #Libraries
@@ -23,12 +26,12 @@ $(EXEC): $(OBJ)
 	@echo Linking $@
 	@echo ==================
 	@echo 
-	@$(LINKER) $@ $^
+	$(LINKER) $@ $^
 	@echo Ta tranquilo, ta linkado
 	@echo 
 
 $(OBJ): $(SRC)
-	@cd src; make
+	$(MAKE) -C $(SRCDIR) all
 	
 .PHONY: clean 
 
