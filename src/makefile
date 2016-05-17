@@ -25,21 +25,22 @@ snake.o: snake.c
 	@echo ==================
 	@echo Compiling $@
 	@echo ==================
-	@echo 
 	@$(CC) -o $@ -c $< $(CFLAGS) $(MAINFLAGS) 
+	@echo -
 	@echo Ta tranquilo, ta compilado.
-	@echo 
+	@echo -
 
 %.o: %.c
 	@echo ==================
 	@echo Compiling $@
 	@echo ==================
-	@echo 
 	@$(CC) -o $@ -c $< $(CFLAGS) 
+	@echo -
 	@echo Ta tranquilo, ta compilado.
-	@echo 
+	@echo -
 	
 .PHONY: clean 
 
 clean:
 	@rm -rf $(OBJ)
+	@echo $(OBJ) removed.

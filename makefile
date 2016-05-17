@@ -25,13 +25,13 @@ $(EXEC): $(OBJ)
 	@echo ==================
 	@echo Linking $@
 	@echo ==================
-	@echo 
-	$(LINKER) $@ $^
+	@$(LINKER) $@ $^
+	@echo -
 	@echo Ta tranquilo, ta linkado
-	@echo 
+	@echo -
 
 $(OBJ): $(SRC)
-	$(MAKE) -C $(SRCDIR) all
+	@$(MAKE) -C  $(SRCDIR) -s all
 	
 .PHONY: clean 
 
