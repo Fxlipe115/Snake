@@ -35,9 +35,14 @@ void decreaseSnake(struct snake *head){
 	}   
 }
 
-struct snake* newSnake(int size){
+struct snake* newSnake(int size,int x,int y){
 	struct snake *head = malloc(sizeof(struct snake));
+	head->x = x;
+	head->y = y;
+
 	struct snake *tail = malloc(sizeof(struct snake));
+	tail->x = x;
+	head->y = y;
 
 	head->next = tail;
 	tail->next = NULL;

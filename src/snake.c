@@ -9,18 +9,14 @@
 #define MATRIX_SIZE 10
 
 int main(){
-	Snake *snake = newSnake(SNAKE_SIZE);
+	Snake *snake = newSnake(SNAKE_SIZE,MATRIX_SIZE/2,MATRIX_SIZE/2);
 	char key;
 	
-	printf("TAMANHO DA COBRA: %d\n",SNAKE_SIZE);
 	printf("TAMANHO DO MAPA: %dX%d\n\n",MATRIX_SIZE,MATRIX_SIZE);
-	
-	//RECEBE AS COORDENADAS DAS PARTES DO CORPO DA COBRA
-	printf("COORDENADAS INICIAIS DA COBRA:\n");
-	
-	scanf(" %d %d",&snake->x,&snake->y);
-	
+		
 	//DESENHA A TELA
+	printf("TAMANHO DA COBRA: %d\n",getSnakeSize(snake));
+
 	for(int i = 0, size = MATRIX_SIZE+2; i<size; i++){
 		printf("#");
 	}
@@ -93,6 +89,8 @@ int main(){
 			
 			//clrscr();
 			//DESENHA A TELA
+			printf("TAMANHO DA COBRA: %d\n",getSnakeSize(snake));
+
 			for(int i = 0, size = MATRIX_SIZE+2; i<size; i++){
 				printf("#");
 			}

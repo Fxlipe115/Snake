@@ -13,7 +13,7 @@ typedef struct snake{
 	struct snake *next;
 } Snake;
 
-Snake* newSnake(int size);
+Snake* newSnake(int size,int x,int y);
 
 void destroySnake(Snake *head);
 
