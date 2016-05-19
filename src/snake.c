@@ -4,6 +4,7 @@
 
 //#include "../include/grf_snake_lib.h"
 #include "grf_snake_lib.h"
+#include "grf_draw_lib.h"
 
 #define SNAKE_SIZE 5
 #define MATRIX_SIZE 10
@@ -15,33 +16,7 @@ int main(){
 	printf("TAMANHO DO MAPA: %dX%d\n\n",MATRIX_SIZE,MATRIX_SIZE);
 		
 	//DESENHA A TELA
-	printf("TAMANHO DA COBRA: %d\n",getSnakeSize(snake));
-
-	for(int i = 0, size = MATRIX_SIZE+2; i<size; i++){
-		printf("#");
-	}
-	printf("\n");
-	
-	for(int y = 0; y<MATRIX_SIZE; y++){
-		printf("#");
-		for(int x = 0; x<MATRIX_SIZE; x++){
-			if(snake->y == y && snake->x == x){
-				printf("@");
-			}else if(isSnake(snake,x,y)){
-				printf("*");
-			}else{
-				printf(" ");
-			}
-		}
-		printf("#\n");
-	}
-		
-	for(int i = 0, size = MATRIX_SIZE+2; i<size; i++){
-		printf("#");
-	}
-	printf("\n");
-	//FIM DESENHA A TELA
-	
+	refreshScreen(snake,MATRIX_SIZE);
 	
 	//MOVIMENTAÇÃO
 	printf("ENTRADA DE COMANDOS: (DIGITE 'X' PARA SAIR)\n");
@@ -82,39 +57,15 @@ int main(){
 		}
 		if(key == 'W' || key == 'A' || key == 'S' || key == 'D'){
 			//ATUALIZA POSIÇÃO DO CORPO DA COBRA
-			moveSnake(snake,dir);
+			moveSnake(snake,dir,MATRIX_SIZE,MATRIX_SIZE);
 		}
 		
 		if(key != 'X'){
 			
 			//clrscr();
 			//DESENHA A TELA
-			printf("TAMANHO DA COBRA: %d\n",getSnakeSize(snake));
+			refreshScreen(snake,MATRIX_SIZE);
 
-			for(int i = 0, size = MATRIX_SIZE+2; i<size; i++){
-				printf("#");
-			}
-			printf("\n");
-			
-			for(int y = 0; y<MATRIX_SIZE; y++){
-				printf("#");
-				for(int x = 0; x<MATRIX_SIZE; x++){
-					if(snake->y == y && snake->x == x){
-						printf("@");
-					}else if(isSnake(snake,x,y)){
-						printf("*");
-					}else{
-						printf(" ");
-					}
-				}
-				printf("#\n");
-			}
-			
-			for(int i = 0, size = MATRIX_SIZE+2; i<size; i++){
-				printf("#");
-			}
-			printf("\n");
-			//FIM DESENHA A TELA
 		}
 		
 		

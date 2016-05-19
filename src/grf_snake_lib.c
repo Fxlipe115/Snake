@@ -63,23 +63,23 @@ void destroySnake(struct snake *head){
 	}
 }
 
-void moveSnake(struct snake *head,int dir){
+void moveSnake(struct snake *head,int dir,int xSize,int ySize){
 	
 	decreaseSnake(head);
 	increaseSnake(head);
 	
 	switch(dir){
 		case 0:
-			head->x++;
+			head->x = (head->x + 1) % xSize;
 			break;
 		case 90:
-			head->y--;
+			head->y = (head->y - 1) % ySize;
 			break;
 		case 180:
-			head->x--;
+			head->x = (head->x - 1) % xSize;
 			break;
 		case 270:
-			head->y++;
+			head->y = (head->y + 1) % ySize;
 			break;
 		//default:
 	}			

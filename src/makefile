@@ -5,8 +5,8 @@
 CC=gcc -std=c99 -c
 
 #Flags
-CFLAGS=-Wall -std=c99 -ggdb3
-MAINFLAGS=-lm -lconio -I'../include' 
+CFLAGS=-Wall -std=c99 -ggdb3 -I'../include'
+MAINFLAGS=-lm -lconio 
 
 #Source files
 SRC=$(wildcard *.c)
