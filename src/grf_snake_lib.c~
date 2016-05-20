@@ -73,16 +73,10 @@ void moveSnake(struct snake *head,int dir,int xSize,int ySize){
 			head->x = (head->x + 1) % xSize;
 			break;
 		case 90:
-			head->y--;
-			if(head->y < 0){
-				head->y = ySize-1;
-			}
+			head->y = (head->y - 1) % ySize;
 			break;
 		case 180:
-			head->x--;
-			if(head->x < 0){
-				head->x = xSize-1;
-			}
+			head->x = (head->x - 1) % xSize;
 			break;
 		case 270:
 			head->y = (head->y + 1) % ySize;
