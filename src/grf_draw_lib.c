@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <conio.h>
+//#include <conio.h>
 
 #include "grf_snake_lib.h"
 
@@ -12,7 +12,7 @@ char* loadMap(char* filename,int *width,int *height){
 //Imprime a tela com todos os elementos nela
 void refreshScreen(Snake *snake,int matrixSize){
 	//DESENHA A TELA
-	gotoxy(0,0);
+	//gotoxy(0,0);
 	printf("TAMANHO DA COBRA: %d\n",getSnakeSize(snake));
 
 	for(int i = 0, size = matrixSize+2; i<size; i++){
@@ -25,6 +25,8 @@ void refreshScreen(Snake *snake,int matrixSize){
 		for(int x = 0; x<matrixSize; x++){
 			if(snake->y == y && snake->x == x){
 				printf("@");
+			}else if(hasFood(snake,x,y)){
+				printf("O");
 			}else if(isSnake(snake,x,y)){
 				printf("*");
 			}else{

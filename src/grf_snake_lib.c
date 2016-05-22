@@ -3,6 +3,7 @@
 struct snake{
 	int x;
 	int y;
+	int food;
 	struct snake *next;
 };
 
@@ -15,11 +16,12 @@ int getSnakeSize(struct snake *head){
 	return size;
 }
 
-void increaseSnake(struct snake *head){
+void increaseSnake(struct snake *head,int food){
 	struct snake *newbody = malloc(sizeof(struct snake));
 	
 	newbody->x = head->x;
 	newbody->y = head->y;
+	newbody->food = food;
 	
 	newbody->next = head->next;
 	head->next = newbody;
@@ -39,17 +41,19 @@ struct snake* newSnake(int size,int x,int y){
 	struct snake *head = malloc(sizeof(struct snake));
 	head->x = x;
 	head->y = y;
+	head->food = 0;
 
 	struct snake *tail = malloc(sizeof(struct snake));
 	tail->x = x;
-	head->y = y;
+	tail->y = y;
+	tail->food = 0;
 
 	head->next = tail;
 	tail->next = NULL;
 	size -= 1;
 
 	for(int i = 0; i<size; i++){
-		increaseSnake(head);
+		increaseSnake(head,0);
 	}
 
 	return head;
@@ -66,7 +70,7 @@ void destroySnake(struct snake *head){
 void moveSnake(struct snake *head,int dir,int xSize,int ySize){
 	
 	decreaseSnake(head);
-	increaseSnake(head);
+	increaseSnake(head,0);
 	
 	switch(dir){
 		case 0:
@@ -95,11 +99,23 @@ void moveSnake(struct snake *head,int dir,int xSize,int ySize){
 int isSnake(struct snake *head,int x,int y){
 	int isSnake = 0;
 	
-	while(head->next != NULL){
+	while(head->next != NULL && isSnake == 0){
 		if((head->x == x) && (head->y == y)){
 			isSnake = 1;
 		}
 		head = head->next;
 	}
 	return isSnake;
+}
+
+int hasFood(struct snake *head,int x,int y){
+	int hasFood = 0;
+
+	while(head->next != NULL){
+		if((head->x == x) && (head->y == y) && head->food){
+			hasFood = 1;
+		}
+		head = head->next;
+	}
+	return hasFood;
 }

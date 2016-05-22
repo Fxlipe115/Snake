@@ -46,7 +46,7 @@ int main(){
 				dir = _RIGHT_;
 				break;
 			case '+':
-				increaseSnake(snake);
+				increaseSnake(snake,1);
 				break;
 			case '-':
 				if(getSnakeSize(snake) > 2)
