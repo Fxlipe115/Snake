@@ -98,9 +98,12 @@ void moveSnake(struct snake *head,int dir,int xSize,int ySize){
 	
 int isSnake(struct snake *head,int x,int y){
 	int isSnake = 0;
-	
+
 	while(head->next != NULL && isSnake == 0){
-		if((head->x == x) && (head->y == y)){
+
+		int position = ((head->x == x) && (head->y == y));
+
+		if(position){
 			isSnake = 1;
 		}
 		head = head->next;
@@ -112,7 +115,10 @@ int hasFood(struct snake *head,int x,int y){
 	int hasFood = 0;
 
 	while(head->next != NULL){
-		if((head->x == x) && (head->y == y) && head->food){
+
+		int position = ((head->x == x) && (head->y == y));
+
+		if(position && head->food){
 			hasFood = 1;
 		}
 		head = head->next;

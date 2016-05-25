@@ -1,3 +1,9 @@
 #include<stdio.h>
 
-//TODO
+void startLevel(){
+	//TODO
+}
+
+void startMenu(){
+	//TODO
+}

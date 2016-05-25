@@ -7,7 +7,7 @@
 #include "grf_draw_lib.h"
 
 #define SNAKE_SIZE 5
-#define MATRIX_SIZE 50
+#define MATRIX_SIZE 25
 
 int main(){
 	//Inicia ncurses
@@ -26,7 +26,7 @@ int main(){
 	//Pausa entre as iterações
 	struct timespec espera;
 	espera.tv_sec = 0;
-	espera.tv_nsec = 500000000L;
+	espera.tv_nsec = 100000000L;
 	
 	printf("Snake started.\n\n");
 
