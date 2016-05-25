@@ -4,6 +4,8 @@
 #Compiler
 LINKER=gcc -o
 
+LFLAGS=-lncurses
+
 #Directories
 SRCDIR=src
 
@@ -25,7 +27,7 @@ $(EXEC): $(OBJ)
 	@echo ==================
 	@echo Linking $@
 	@echo ==================
-	@$(LINKER) $@ $^
+	@$(LINKER) $@ $^ $(LFLAGS)
 	@echo -
 	@echo Ta tranquilo, ta linkado
 	@echo -

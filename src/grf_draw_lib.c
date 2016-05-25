@@ -1,5 +1,5 @@
 #include <stdio.h>
-//#include <conio.h>
+#include <curses.h>
 
 #include "grf_snake_lib.h"
 
@@ -12,33 +12,55 @@ char* loadMap(char* filename,int *width,int *height){
 //Imprime a tela com todos os elementos nela
 void refreshScreen(Snake *snake,int matrixSize){
 	//DESENHA A TELA
-	//gotoxy(0,0);
-	printf("TAMANHO DA COBRA: %d\n",getSnakeSize(snake));
+	//initscr();
+	start_color();
 
-	for(int i = 0, size = matrixSize+2; i<size; i++){
-		printf("#");
-	}
-	printf("\n");
-	
+	init_pair(1,COLOR_MAGENTA,COLOR_MAGENTA);//fundo
+	init_pair(2,COLOR_WHITE,COLOR_BLACK);//score
+	init_pair(3,COLOR_WHITE,COLOR_WHITE);//mapa
+	init_pair(4,COLOR_BLACK,COLOR_BLACK);//cabeça
+	init_pair(5,COLOR_RED,COLOR_RED);//comida
+	init_pair(6,COLOR_BLUE,COLOR_BLUE);//corpo
+	move(0,0);
+
+	bkgd(COLOR_PAIR(1));	
+
+	attron(COLOR_PAIR(2));
+	printw("Tamanho: %d\n",getSnakeSize(snake));
+	attroff(COLOR_PAIR(2));
+
 	for(int y = 0; y<matrixSize; y++){
-		printf("#");
 		for(int x = 0; x<matrixSize; x++){
 			if(snake->y == y && snake->x == x){
-				printf("@");
+				attron(COLOR_PAIR(4));
+				printw("  ");
+				attroff(COLOR_PAIR(4));
+				//printf("@");
 			}else if(hasFood(snake,x,y)){
-				printf("O");
+				attron(COLOR_PAIR(5));
+				printw("  ");
+				attroff(COLOR_PAIR(5));
+				//printf("O");
 			}else if(isSnake(snake,x,y)){
-				printf("*");
+				attron(COLOR_PAIR(6));
+				printw("  ");
+				attroff(COLOR_PAIR(6));
+				//printf("*");
 			}else{
-				printf(" ");
+				attron(COLOR_PAIR(3));
+				printw("  ");
+				attroff(COLOR_PAIR(3));
+				//printf(" ");
 			}
 		}
-		printf("#\n");
+		printw("\n");
 	}
 		
-	for(int i = 0, size = matrixSize+2; i<size; i++){
+	/*for(int i = 0, size = matrixSize+2; i<size; i++){
 		printf("#");
 	}
-	printf("\n");
+	printf("\n");*/
+	
+	refresh();
 	//FIM DESENHA A TELA
 }

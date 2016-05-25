@@ -1,33 +1,46 @@
 #include <stdio.h>
 #include <ctype.h>
-//#include <conio.h>
+#include <curses.h>
+#include <time.h>
 
-//#include "../include/grf_snake_lib.h"
 #include "grf_snake_lib.h"
 #include "grf_draw_lib.h"
 
 #define SNAKE_SIZE 5
-#define MATRIX_SIZE 10
+#define MATRIX_SIZE 50
 
 int main(){
+	//Inicia ncurses
+	initscr();
+	nodelay(stdscr,TRUE);
+
+	//Cria a cobra
 	Snake *snake = newSnake(SNAKE_SIZE,MATRIX_SIZE/2,MATRIX_SIZE/2);
+	
+	//Input do usuário
 	char key;
+
+	//Direção inicial da cobra
+	int dir = _RIGHT_;
+
+	//Pausa entre as iterações
+	struct timespec espera;
+	espera.tv_sec = 0;
+	espera.tv_nsec = 500000000L;
 	
-	printf("TAMANHO DO MAPA: %dX%d\n\n",MATRIX_SIZE,MATRIX_SIZE);
-		
-	//DESENHA A TELA
-	refreshScreen(snake,MATRIX_SIZE);
-	
+	printf("Snake started.\n\n");
+
 	//MOVIMENTAÇÃO
-	printf("ENTRADA DE COMANDOS: (DIGITE 'X' PARA SAIR)\n");
 	do{
 		//INPUT DE COMANDOS
-		scanf(" %c",&key);
-		//key = getch();
-		key = toupper(key);
-		
+		//scanf(" %c",&key);
+		key = getch();
+
+		if(key != ERR){
+			key = toupper(key);
+		}
+
 		//ATUALIZA POSIÇÃO DA CABEÇA DA COBRA
-		int dir;
 		switch(key){
 			case 'W':
 				//snake[0].y--;
@@ -53,12 +66,13 @@ int main(){
 					decreaseSnake(snake);
 				break;
 			case 'X':
+				endwin();
 				break;
 		}
-		if(key == 'W' || key == 'A' || key == 'S' || key == 'D'){
+		//if(key == 'W' || key == 'A' || key == 'S' || key == 'D'){
 			//ATUALIZA POSIÇÃO DO CORPO DA COBRA
 			moveSnake(snake,dir,MATRIX_SIZE,MATRIX_SIZE);
-		}
+		//}
 		
 		if(key != 'X'){
 			
@@ -67,11 +81,14 @@ int main(){
 			refreshScreen(snake,MATRIX_SIZE);
 
 		}
-		
+
+		nanosleep(&espera,NULL);
 		
 	}while(key != 'X');
 	
 	destroySnake(snake);
+
+	printf("Snake ended.\n\n");
 	
 	return 0;
 }
