@@ -5,4 +5,6 @@ void startLevel();
 
 void startMenu();
 
+int getInput();
+
 #endif

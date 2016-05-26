@@ -5,6 +5,7 @@
 
 #include "grf_snake_lib.h"
 #include "grf_draw_lib.h"
+#include "grf_control_lib.h"
 
 #define SNAKE_SIZE 5
 #define MATRIX_SIZE 25
