@@ -11,15 +11,19 @@
 #define MATRIX_SIZE 25
 
 int main(){
+	printf("Snake started.\n\n");
+
 	//Inicia ncurses
 	initscr();
 	nodelay(stdscr,TRUE);
+	keypad(stdscr,TRUE);
+	noecho();
 
 	//Cria a cobra
 	Snake *snake = newSnake(SNAKE_SIZE,MATRIX_SIZE/2,MATRIX_SIZE/2);
 	
 	//Input do usuário
-	char key;
+	int key;
 
 	//Direção inicial da cobra
 	int dir = _RIGHT_;
@@ -29,8 +33,6 @@ int main(){
 	espera.tv_sec = 0;
 	espera.tv_nsec = 100000000L;
 	
-	printf("Snake started.\n\n");
-
 	//MOVIMENTAÇÃO
 	do{
 		//INPUT DE COMANDOS
@@ -44,20 +46,28 @@ int main(){
 		//ATUALIZA POSIÇÃO DA CABEÇA DA COBRA
 		switch(key){
 			case 'W':
-				//snake[0].y--;
-				dir = _UP_;
+			case KEY_UP:
+				if(dir != _DOWN_){
+					dir = _UP_;
+				}
 				break;
 			case 'A':
-				//snake[0].x--;
-				dir = _LEFT_;
+			case KEY_LEFT:
+				if(dir != _RIGHT_){
+					dir = _LEFT_;
+				}
 				break;
 			case 'S':
-				//snake[0].y++;
-				dir = _DOWN_;
+			case KEY_DOWN:
+				if(dir != _UP_){
+					dir = _DOWN_;
+				}
 				break;
 			case 'D':
-				//snake[0].x++;
-				dir = _RIGHT_;
+			case KEY_RIGHT:
+				if(dir != _LEFT_){
+					dir = _RIGHT_;
+				}
 				break;
 			case '+':
 				increaseSnake(snake,1);

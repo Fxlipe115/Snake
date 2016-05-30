@@ -4,6 +4,7 @@ struct snake{
 	int x;
 	int y;
 	int food;
+	int dir;
 	struct snake *next;
 };
 
@@ -42,6 +43,7 @@ struct snake* newSnake(int size,int x,int y){
 	head->x = x;
 	head->y = y;
 	head->food = 0;
+	head->dir = 0;
 
 	struct snake *tail = malloc(sizeof(struct snake));
 	tail->x = x;
