@@ -12,4 +12,5 @@ void startMenu(){
 int getInput(){
 	//TODO
 	//trecho do snake.c
+	return 0;
 }
