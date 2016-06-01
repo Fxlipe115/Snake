@@ -24,9 +24,9 @@ EXEC=snake
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
-	@echo ==================
+	@echo =========================
 	@echo Linking $@
-	@echo ==================
+	@echo =========================
 	@$(LINKER) $@ $^ $(LFLAGS)
 	@echo -
 	@echo Ta tranquilo, ta linkado

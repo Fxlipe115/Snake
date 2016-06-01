@@ -5,6 +5,6 @@ void startLevel();
 
 void startMenu();
 
-int getInput();
+int gameControl(int dir);
 
 #endif

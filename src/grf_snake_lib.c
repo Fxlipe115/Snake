@@ -1,14 +1,16 @@
 #include <stdlib.h>
 
-struct snake{
+#include "grf_snake_lib.h"
+
+/*struct snake{
 	int x;
 	int y;
 	int food;
 	int dir;
 	struct snake *next;
-};
+};*/
 
-int getSnakeSize(struct snake *head){
+int getSnakeSize(Snake *head){
 	int size = 0;
 	while(head->next != NULL){
 		size++;
@@ -17,8 +19,8 @@ int getSnakeSize(struct snake *head){
 	return size;
 }
 
-void increaseSnake(struct snake *head,int food){
-	struct snake *newbody = malloc(sizeof(struct snake));
+void increaseSnake(Snake *head,int food){
+	Snake *newbody = malloc(sizeof(Snake));
 	
 	newbody->x = head->x;
 	newbody->y = head->y;
@@ -28,7 +30,7 @@ void increaseSnake(struct snake *head,int food){
 	head->next = newbody;
 }
 
-void decreaseSnake(struct snake *head){
+void decreaseSnake(Snake *head){
 	if(getSnakeSize(head) > 1){
 		while(head->next->next != NULL){
 			head = head->next;
@@ -38,14 +40,13 @@ void decreaseSnake(struct snake *head){
 	}   
 }
 
-struct snake* newSnake(int size,int x,int y){
-	struct snake *head = malloc(sizeof(struct snake));
+Snake* newSnake(int size,int x,int y){
+	Snake *head = malloc(sizeof(Snake));
 	head->x = x;
 	head->y = y;
 	head->food = 0;
-	head->dir = 0;
 
-	struct snake *tail = malloc(sizeof(struct snake));
+	Snake *tail = malloc(sizeof(Snake));
 	tail->x = x;
 	tail->y = y;
 	tail->food = 0;
@@ -61,36 +62,36 @@ struct snake* newSnake(int size,int x,int y){
 	return head;
 }
 
-void destroySnake(struct snake *head){
+void destroySnake(Snake *head){
 	while(head != NULL){
-		struct snake *tmp = head;
+		Snake *tmp = head;
 		head = head->next;
 		free(tmp);
 	}
 }
 
-void moveSnake(struct snake *head,int dir,int xSize,int ySize){
+void moveSnake(Snake *head,int dir,int xSize,int ySize){
 	
 	decreaseSnake(head);
 	increaseSnake(head,0);
 	
 	switch(dir){
-		case 0:
+		case _RIGHT_:
 			head->x = (head->x + 1) % xSize;
 			break;
-		case 90:
+		case _UP_:
 			head->y--;
 			if(head->y < 0){
 				head->y = ySize-1;
 			}
 			break;
-		case 180:
+		case _LEFT_:
 			head->x--;
 			if(head->x < 0){
 				head->x = xSize-1;
 			}
 			break;
-		case 270:
+		case _DOWN_:
 			head->y = (head->y + 1) % ySize;
 			break;
 		//default:
@@ -98,7 +99,7 @@ void moveSnake(struct snake *head,int dir,int xSize,int ySize){
 }
 
 	
-int isSnake(struct snake *head,int x,int y){
+int isSnake(Snake *head,int x,int y){
 	int isSnake = 0;
 
 	while(head->next != NULL && isSnake == 0){
@@ -113,7 +114,7 @@ int isSnake(struct snake *head,int x,int y){
 	return isSnake;
 }
 
-int hasFood(struct snake *head,int x,int y){
+int hasFood(Snake *head,int x,int y){
 	int hasFood = 0;
 
 	while(head->next != NULL){

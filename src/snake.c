@@ -21,22 +21,20 @@ int main(){
 
 	//Cria a cobra
 	Snake *snake = newSnake(SNAKE_SIZE,MATRIX_SIZE/2,MATRIX_SIZE/2);
-	
-	//Input do usuário
-	int key;
 
 	//Direção inicial da cobra
 	int dir = _RIGHT_;
 
 	//Pausa entre as iterações
-	struct timespec espera;
-	espera.tv_sec = 0;
-	espera.tv_nsec = 100000000L;
+	struct timespec wait;
+	wait.tv_sec = 0;
+	wait.tv_nsec = 100000000L;
 	
 	//MOVIMENTAÇÃO
 	do{
-		//INPUT DE COMANDOS
-		//scanf(" %c",&key);
+		dir = gameControl(dir);
+
+/*		//INPUT DE COMANDOS
 		key = getch();
 
 		if(key != ERR){
@@ -81,21 +79,24 @@ int main(){
 				break;
 		}
 		//if(key == 'W' || key == 'A' || key == 'S' || key == 'D'){
+*/
+
 			//ATUALIZA POSIÇÃO DO CORPO DA COBRA
 			moveSnake(snake,dir,MATRIX_SIZE,MATRIX_SIZE);
 		//}
-		
-		if(key != 'X'){
 			
-			//clrscr();
-			//DESENHA A TELA
-			refreshScreen(snake,MATRIX_SIZE);
+		//DESENHA A TELA
+		refreshScreen(snake,MATRIX_SIZE);
 
+
+		if(dir == 'X'){
+			endwin();
 		}
 
-		nanosleep(&espera,NULL);
+
+		nanosleep(&wait,NULL);
 		
-	}while(key != 'X');
+	}while(dir != 'X');
 	
 	destroySnake(snake);
 

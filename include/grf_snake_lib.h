@@ -11,7 +11,6 @@ typedef struct snake{
 	int x;
 	int y;
 	int food;
-	int dir;
 	struct snake *next;
 } Snake;
 

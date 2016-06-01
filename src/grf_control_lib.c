@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <curses.h>
+#include <ctype.h>
 
 #include "grf_snake_lib.h"
 
@@ -12,33 +13,33 @@ void startMenu(){
 	//TODO
 }
 
-int gameControl(Snake *snake){
+int gameControl(int dir){
 	int key = getch();
 	
 	if(key != ERR){
-		switch(key){
+		switch(toupper(key)){
 			case 'W':
 			case KEY_UP:
-				if(snake->dir != _DOWN_){
-					snake->dir = _UP_;
+				if(dir != _DOWN_){
+					dir = _UP_;
 				}
 				break;
 			case 'A':
 			case KEY_LEFT:
-				if(snake->dir != _RIGHT_){
-					snake->dir = _LEFT_;
+				if(dir != _RIGHT_){
+					dir = _LEFT_;
 				}
 				break;
 			case 'S':
 			case KEY_DOWN:
-				if(snake->dir != _UP_){
-					snake->dir = _DOWN_;
+				if(dir != _UP_){
+					dir = _DOWN_;
 				}
 				break;
 			case 'D':
 			case KEY_RIGHT:
-				if(snake->dir != _LEFT_){
-					snake->dir = _RIGHT_;
+				if(dir != _LEFT_){
+					dir = _RIGHT_;
 				}
 				break;
 //			case '+':
@@ -48,10 +49,10 @@ int gameControl(Snake *snake){
 //				if(getSnakeSize(snake) > 2)
 //					decreaseSnake(snake);
 //				break;
-//			case 'X':
-//				endwin();
-//				break;
+			case 'X':
+				dir = 'X';
+				break;
 		}
 	}
-	return 0;
+	return dir;
 }

@@ -22,18 +22,18 @@ OBJ=$(SRC:.c=.o)
 all: $(OBJ)
 
 snake.o: snake.c
-	@echo ==================
+	@echo =========================
 	@echo Compiling $@
-	@echo ==================
+	@echo =========================
 	@$(CC) -o $@ -c $< $(CFLAGS) $(MAINFLAGS) 
 	@echo -
 	@echo Ta tranquilo, ta compilado.
 	@echo -
 
 %.o: %.c
-	@echo ==================
+	@echo =========================
 	@echo Compiling $@
-	@echo ==================
+	@echo =========================
 	@$(CC) -o $@ -c $< $(CFLAGS) 
 	@echo -
 	@echo Ta tranquilo, ta compilado.
