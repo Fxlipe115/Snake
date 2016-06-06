@@ -2,13 +2,6 @@
 
 #include "grf_snake_lib.h"
 
-/*struct snake{
-	int x;
-	int y;
-	int food;
-	int dir;
-	struct snake *next;
-};*/
 
 int getSnakeSize(Snake *head){
 	int size = 0;

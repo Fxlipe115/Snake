@@ -3,6 +3,8 @@
 
 char* loadMap(char* filename,int *width,int *height);
 
-void refreshScreen(Snake *snake,int matrixSize);
+void destroyMap(char* map,int height);
+
+void refreshScreen(WINDOW *window,Snake *snake,char *map,int matrixSize,int matrixySize);
 
 #endif

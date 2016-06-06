@@ -4,7 +4,7 @@
 #Compiler
 LINKER=gcc -o
 
-LFLAGS=-lncurses
+LFLAGS=-lncurses -lm
 
 #Directories
 SRCDIR=src

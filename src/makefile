@@ -6,7 +6,6 @@ CC=gcc -std=c99 -c
 
 #Flags
 CFLAGS=-Wall -std=gnu99 -ggdb3 -I'../include'
-MAINFLAGS=-lm
 
 #Source files
 SRC=$(wildcard *.c)
@@ -25,7 +24,7 @@ snake.o: snake.c
 	@echo =========================
 	@echo Compiling $@
 	@echo =========================
-	@$(CC) -o $@ -c $< $(CFLAGS) $(MAINFLAGS) 
+	@$(CC) -o $@ -c $< $(CFLAGS)
 	@echo -
 	@echo Ta tranquilo, ta compilado.
 	@echo -
