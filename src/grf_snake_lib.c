@@ -5,7 +5,7 @@
 
 int getSnakeSize(Snake *head){
 	int size = 0;
-	while(head->next != NULL){
+	while(head != NULL){
 		size++;
 		head = head->next;
 	}
@@ -46,7 +46,7 @@ Snake* newSnake(int size,int x,int y){
 
 	head->next = tail;
 	tail->next = NULL;
-	size -= 1;
+	size -= 2;
 
 	for(int i = 0; i<size; i++){
 		increaseSnake(head,0);
@@ -95,7 +95,7 @@ void moveSnake(Snake *head,int dir,int xSize,int ySize){
 int isSnake(Snake *head,int x,int y){
 	int isSnake = 0;
 
-	while(head->next != NULL && isSnake == 0){
+	while(head != NULL && isSnake == 0){
 
 		int position = ((head->x == x) && (head->y == y));
 
