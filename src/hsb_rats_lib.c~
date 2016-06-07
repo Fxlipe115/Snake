@@ -40,7 +40,7 @@ void destroyRat (Rats* rat){
 }
 
 
-void newRat (Rats* ratlist, char** map, int height, int width, int time, Snake *snake){
+void newRat (Rats* ratlist, char** map, int height, int width, int time, Snake* snake){
 
 	Rats* rat = malloc(sizeof(Rats));
 
