@@ -31,7 +31,7 @@ void startLevel(){
 	unsigned int iteraction = 0;
 
 	int mapHeight, mapWidth;
-	char *map = loadMap("maps/0.txt",&mapWidth,&mapHeight);
+	char **map = loadMap("maps/0.txt",&mapWidth,&mapHeight);
 
 	//MOVIMENTAÇÃO
 	do{
@@ -63,7 +63,7 @@ void startLevel(){
 		
 	}while(dir != 'Q');
 
-	//destroyMap(map,mapHeight);
+	destroyMap(map,mapHeight);
 
 	//Encerra a tela
 	delwin(gamescr);

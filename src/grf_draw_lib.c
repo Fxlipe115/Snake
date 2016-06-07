@@ -32,9 +32,9 @@ char** loadMap(char* filename,int* width,int* height){
 	return mapa;
 }
 
-void destroyMap(char* map,int height){
+void destroyMap(char** map,int height){
 	for(int i = 0; i<height; i++){
-		free(*map);
+		free(map[i]);
 	}
 	free(map);
 }
