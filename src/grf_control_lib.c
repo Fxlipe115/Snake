@@ -2,36 +2,46 @@
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
+#include <string.h>
 
 #include "grf_snake_lib.h"
 #include "grf_draw_lib.h"
 #include "grf_control_lib.h"
 
 #define SNAKE_SIZE 5
-#define MATRIX_SIZE 25
 
-void startLevel(){
-	//Janela do jogo
+int startLevel(int lvl){
+	//Game window
 	WINDOW *gamescr = newwin(0,0,0,0);
 	nodelay(gamescr,TRUE);
 	keypad(gamescr,TRUE);
 	noecho();
 
-	//Cria a cobra
-	Snake *snake = newSnake(SNAKE_SIZE,MATRIX_SIZE/2,MATRIX_SIZE/2);
+	//Score
+	int score = 0;
 
-	//Direção inicial da cobra
+	//Initial direction of snake
 	int dir = _RIGHT_;
 
-	//Pausa entre as iterações
+	//Pause between iteractions
 	struct timespec wait;
 	wait.tv_sec = 0;
 	wait.tv_nsec = 999999999L;
 
+	//Number of iteraction for mouse creation/destruction control
 	unsigned int iteraction = 0;
 
+	//Map loading
 	int mapHeight, mapWidth;
-	char **map = loadMap("maps/0.txt",&mapWidth,&mapHeight);
+	char mapfile[13] = "maps/", lvlstr[3];
+	sprintf(lvlstr,"%d",lvl);
+	strcat(mapfile,lvlstr);
+	strcat(mapfile,".txt");
+
+	char **map = loadMap(mapfile,&mapWidth,&mapHeight);
+
+	//Create snake
+	Snake *snake = newSnake(SNAKE_SIZE,mapWidth/2,mapHeight/2);
 
 	//MOVIMENTAÇÃO
 	do{
@@ -70,7 +80,8 @@ void startLevel(){
 
 	//Destroy a cobra	
 	destroySnake(snake);
-
+	
+	return score;
 }
 
 void startMenu(){

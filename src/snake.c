@@ -20,7 +20,7 @@ int main(){
 	keypad(stdscr,TRUE);
 	noecho();
 
-	startLevel();
+	startLevel(1);
 
 	endwin();
 	

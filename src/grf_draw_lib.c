@@ -45,12 +45,13 @@ void refreshScreen(WINDOW *window,Snake *snake,char **map,int matrixSize,int mat
 	//initscr();
 	start_color();
 
-	init_pair(1,COLOR_MAGENTA,COLOR_MAGENTA);//fundo
+	init_pair(1,COLOR_MAGENTA,COLOR_MAGENTA);//background
 	init_pair(2,COLOR_WHITE,COLOR_BLACK);//score
-	init_pair(3,COLOR_WHITE,COLOR_WHITE);//mapa
-	init_pair(4,COLOR_BLACK,COLOR_BLACK);//cabeça
-	init_pair(5,COLOR_RED,COLOR_RED);//comida
-	init_pair(6,COLOR_BLUE,COLOR_BLUE);//corpo
+	init_pair(3,COLOR_WHITE,COLOR_WHITE);//map
+	init_pair(4,COLOR_BLACK,COLOR_BLACK);//wall
+	init_pair(5,COLOR_RED,COLOR_RED);//food
+	init_pair(6,COLOR_GREEN,COLOR_GREEN);//body
+	init_pair(7,COLOR_YELLOW,COLOR_YELLOW);//head
 	wmove(window,0,0);
 
 	wbkgd(window,COLOR_PAIR(1));	
@@ -62,26 +63,27 @@ void refreshScreen(WINDOW *window,Snake *snake,char **map,int matrixSize,int mat
 	for(int y = 0; y<matrixySize; y++){
 		for(int x = 0; x<matrixSize; x++){
 			if(snake->y == y && snake->x == x){
-				wattron(window,COLOR_PAIR(4));
+				//head
+				wattron(window,COLOR_PAIR(7));
 				wprintw(window,"  ");
-				wattroff(window,COLOR_PAIR(4));
-				//printf("@");
+				wattroff(window,COLOR_PAIR(7));
 			}else if(hasFood(snake,x,y)){
+				//food eaten
 				wattron(window,COLOR_PAIR(5));
 				wprintw(window,"  ");
 				wattroff(window,COLOR_PAIR(5));
-				//printf("O");
 			}else if(isSnake(snake,x,y)){
+				//body
 				wattron(window,COLOR_PAIR(6));
 				wprintw(window,"  ");
 				wattroff(window,COLOR_PAIR(6));
-				//printf("*");
 			}else if(map[y][x] == '#'){
+				//wall
 				wattron(window,COLOR_PAIR(4));
 				wprintw(window,"  ");
 				wattroff(window,COLOR_PAIR(4));
-				//printf(" ");
 			}else{
+				//map background
 				wattron(window,COLOR_PAIR(3));
 				wprintw(window,"  ");
 				wattroff(window,COLOR_PAIR(3));
@@ -93,4 +95,8 @@ void refreshScreen(WINDOW *window,Snake *snake,char **map,int matrixSize,int mat
 	
 	wrefresh(window);
 	//FIM DESENHA A TELA
+}
+
+void drawMenu(){
+	//TODO
 }

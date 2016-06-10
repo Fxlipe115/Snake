@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-#include "hsb_mouse_lib.h"
 #include "grf_snake_lib.h" 
+#include "hsb_mouse_lib.h"
 
 int isMouse(Mouse* mouse, int x, int y){
 	int isMouse = 0;
@@ -56,10 +56,11 @@ void newMouse(Mouse* mouselist, char** map, int height, int width, int time, Sna
 	mouselist = mouse;
 	//mouse lifespan to 'time'
 	mouse->time = time;
-
+	//flag
+	int isValid = 0;
 	do{
 		//flag
-		int isValid = 0;
+		isValid = 0;
 		//ramdomly set (x,y) position to mouse
 		mouse->x = rand() % width;
 		mouse->y = rand() % height;

@@ -3,7 +3,7 @@
 
 #define KEY_ESC 27
 
-void startLevel();
+int startLevel(int lvl);
 
 void startMenu();
 

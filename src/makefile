@@ -20,14 +20,14 @@ OBJ=$(SRC:.c=.o)
 #####MAKE#####
 all: $(OBJ)
 
-snake.o: snake.c
-	@echo =========================
-	@echo Compiling $@
-	@echo =========================
-	@$(CC) -o $@ -c $< $(CFLAGS)
-	@echo -
-	@echo Ta tranquilo, ta compilado.
-	@echo -
+#snake.o: snake.c
+#	@echo =========================
+#	@echo Compiling $@
+#	@echo =========================
+#	@$(CC) -o $@ -c $< $(CFLAGS)
+#	@echo -
+#	@echo Ta tranquilo, ta compilado.
+#	@echo -
 
 %.o: %.c
 	@echo =========================
