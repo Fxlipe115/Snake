@@ -7,6 +7,8 @@ int startLevel(int lvl);
 
 void startMenu();
 
+void menuControl();
+
 int gameControl(int dir);
 
 #endif

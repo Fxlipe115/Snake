@@ -7,4 +7,6 @@ void destroyMap(char** map,int height);
 
 void refreshScreen(WINDOW *window,Snake *snake,char **map,int matrixSize,int matrixySize);
 
+void drawMenu(WINDOW* menu,int option);
+
 #endif

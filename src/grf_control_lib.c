@@ -33,10 +33,8 @@ int startLevel(int lvl){
 
 	//Map loading
 	int mapHeight, mapWidth;
-	char mapfile[13] = "maps/", lvlstr[3];
-	sprintf(lvlstr,"%d",lvl);
-	strcat(mapfile,lvlstr);
-	strcat(mapfile,".txt");
+	char mapfile[13];
+	sprintf(mapfile,"maps/%d.txt",lvl);
 
 	char **map = loadMap(mapfile,&mapWidth,&mapHeight);
 
@@ -85,7 +83,64 @@ int startLevel(int lvl){
 }
 
 void startMenu(){
-	//TODO
+	
+}
+
+void menuControl(){
+	WINDOW *menuscr = newwin(0,0,0,0);
+	int option = 0;
+	int exit = 0;
+
+	nodelay(menuscr,FALSE);
+	keypad(menuscr,TRUE);
+	noecho();
+
+	do{
+		drawMenu(menuscr,option);
+
+		int key = getch();
+
+		switch(toupper(key)){
+			case 'W':
+			case KEY_UP:
+				option--;
+				if(option < 0){
+					option++;
+				}
+				drawMenu(menuscr,option);
+				break;
+			case 'S':
+			case KEY_DOWN:
+				option++;
+				if(option > 3){
+					option--;
+				}
+				drawMenu(menuscr,option);
+				break;
+			case '\n':
+				switch(option){
+					//New Game
+					case 0:
+						startLevel(0);
+						break;
+					//Select Level
+					case 1:
+						startLevel(1);
+						break;
+					//Highscores
+					case 2:
+						//TODO
+						break;
+					//Quit
+					case 3:
+						exit = 1;
+						break;
+				}
+				break;
+		}
+	}while(!exit);
+
+	delwin(menuscr);
 }
 
 int gameControl(int dir){

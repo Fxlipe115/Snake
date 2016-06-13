@@ -97,6 +97,24 @@ void refreshScreen(WINDOW *window,Snake *snake,char **map,int matrixSize,int mat
 	//FIM DESENHA A TELA
 }
 
-void drawMenu(){
-	//TODO
+void drawMenu(WINDOW* menu,int option){
+	char* options[] = {"Start Game","Select Level","Highscores","Quit"};
+
+	start_color();
+	init_pair(0,COLOR_WHITE,COLOR_BLACK);
+	wbkgd(menu,COLOR_PAIR(0));
+	
+	wmove(menu,0,0);
+
+	for(int i = 0; i < 4; i++){
+		if(option == i){
+			wattron(menu,A_REVERSE);
+			wprintw(menu,"-%s\n",options[i]);
+			wattroff(menu,A_REVERSE);
+		}else{
+			wprintw(menu," %s\n",options[i]);
+		}
+	}
+	
+	wrefresh(menu);
 }
