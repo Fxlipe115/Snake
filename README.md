@@ -8,4 +8,4 @@ To install Ncurses use `sudo apt-get install libncurses5-dev` on a terminal.
 
 To compile type `make && make clean` on a terminal inside the "Snake" folder.
 
-Use `./snake` to run (preferably on xterm).
+Use `./snake` to run.
