@@ -114,7 +114,7 @@ int isSnake(Snake *head,int x,int y){
 int hasFood(Snake *head,int x,int y){
 	int hasFood = 0;
 
-	while(head->next != NULL){
+	while(head != NULL){
 
 		int position = ((head->x == x) && (head->y == y));
 

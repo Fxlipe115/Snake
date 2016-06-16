@@ -41,7 +41,7 @@ void destroyMap(char** map,int height){
 }
 
 //Imprime a tela com todos os elementos nela
-void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matrixSize,int matrixySize){
+void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matrixSize,int matrixySize,int score){
 	//DESENHA A TELA
 	//initscr();
 	start_color();
@@ -50,30 +50,31 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matri
 	init_pair(2,COLOR_WHITE,COLOR_BLACK);//score
 	init_pair(3,COLOR_WHITE,COLOR_WHITE);//map
 	init_pair(4,COLOR_BLACK,COLOR_BLACK);//wall
-	init_pair(5,COLOR_RED,COLOR_RED);//food eaten
+	init_pair(5,COLOR_BLACK,COLOR_GREEN);//food eaten
 	init_pair(6,COLOR_GREEN,COLOR_GREEN);//body
-	init_pair(7,COLOR_GREEN,COLOR_GREEN);//head
-	init_pair(8,COLOR_YELLOW,COLOR_YELLOW);//mouse
+	init_pair(7,COLOR_BLACK,COLOR_GREEN);//head
+	init_pair(8,COLOR_BLACK,COLOR_WHITE);//mouse
+	init_pair(9,COLOR_RED,COLOR_WHITE);//rock
 	wmove(window,0,0);
 
 	wbkgd(window,COLOR_PAIR(1));	
 
 	wattron(window,COLOR_PAIR(2));
-	wprintw(window,"Tamanho: %d\n",getSnakeSize(snake));
+	wprintw(window,"Score: %d\n",score);
 	wattroff(window,COLOR_PAIR(2));
 
 	for(int y = 0; y<matrixySize; y++){
 		for(int x = 0; x<matrixSize; x++){
 			if(snake->y == y && snake->x == x){
 				//head
-				wattron(window,COLOR_PAIR(7));
-				wprintw(window,"  ");
-				wattroff(window,COLOR_PAIR(7));
+				wattron(window,COLOR_PAIR(7)|A_BOLD);
+				wprintw(window,"00");
+				wattroff(window,COLOR_PAIR(7)|A_BOLD);
 			}else if(hasFood(snake,x,y)){
 				//food eaten
-				wattron(window,COLOR_PAIR(5));
-				wprintw(window,"  ");
-				wattroff(window,COLOR_PAIR(5));
+				wattron(window,COLOR_PAIR(5)|A_BOLD);
+				wprintw(window,"()");
+				wattroff(window,COLOR_PAIR(5)|A_BOLD);
 			}else if(isSnake(snake,x,y)){
 				//body
 				wattron(window,COLOR_PAIR(6));
@@ -81,14 +82,19 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matri
 				wattroff(window,COLOR_PAIR(6));
 			}else if(isMouse(mouse,x,y)){
 				//mouse
-				wattron(window,COLOR_PAIR(8));
-				wprintw(window,"  ");
-				wattroff(window,COLOR_PAIR(8));
+				wattron(window,COLOR_PAIR(8)|A_BOLD);
+				wprintw(window,"~>");
+				wattroff(window,COLOR_PAIR(8)|A_BOLD);
 			}else if(map[y][x] == '#'){
 				//wall
 				wattron(window,COLOR_PAIR(4));
 				wprintw(window,"  ");
 				wattroff(window,COLOR_PAIR(4));
+			}else if(map[y][x] == '*'){
+				//rocks
+				wattron(window,COLOR_PAIR(9));
+				wprintw(window,"@@");
+				wattroff(window,COLOR_PAIR(9));
 			}else{
 				//map background
 				wattron(window,COLOR_PAIR(3));

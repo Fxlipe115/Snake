@@ -51,9 +51,9 @@ int startLevel(int lvl){
 
 		//Controle da velocidade do jogo
 		iteraction++;
-		if(iteraction % 4 == 0){
-			wait.tv_nsec = ((wait.tv_nsec - 50000000) * .95) + 50000000;
-			mouse = newMouse(mouse,map,mapHeight,mapWidth,16,snake);
+		if(iteraction % mapHeight == 0){
+			wait.tv_nsec = ((wait.tv_nsec - 70000000) * .95) + 70000000;
+			mouse = newMouse(mouse,map,mapHeight,mapWidth,mapHeight*4,snake);
 		}
 
 		dir = gameControl(dir);
@@ -75,10 +75,11 @@ int startLevel(int lvl){
 
 		if(hasEaten){
 			increaseSnake(snake,1);
+			score += (lvl+1);
 		}
 			
 		//DESENHA A TELA
-		refreshScreen(gamescr,snake,mouse,map,mapWidth,mapHeight);
+		refreshScreen(gamescr,snake,mouse,map,mapWidth,mapHeight,score);
 		
 		//Espera para próxima iteração
 		nanosleep(&wait,NULL);
