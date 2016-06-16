@@ -12,8 +12,10 @@ struct mouse *next;
 
 int isMouse(Mouse* mouse, int x, int y);
 
-void DestroyMouse(Mouse* mouse);
+void destroyLastMouse(Mouse* mouse);
 
-void newMouse(Mouse* mouselist, char** map, int height, int width, int time, Snake* snake);
+Mouse* eatMouse(Mouse* mouse,int *hasEaten,int x,int y);
+
+Mouse* newMouse(Mouse* mouselist, char** map, int height, int width, int time, Snake* snake);
 
 #endif

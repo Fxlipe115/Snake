@@ -5,8 +5,9 @@
 #include <string.h>
 
 #include "grf_snake_lib.h"
-#include "grf_draw_lib.h"
+#include "hsb_mouse_lib.h"
 #include "grf_control_lib.h"
+#include "grf_draw_lib.h"
 
 #define SNAKE_SIZE 5
 
@@ -41,12 +42,18 @@ int startLevel(int lvl){
 	//Create snake
 	Snake *snake = newSnake(SNAKE_SIZE,mapWidth/2,mapHeight/2);
 
+	//Create mouse list
+	Mouse *mouse = NULL;
+
 	//MOVIMENTAÇÃO
 	do{
+		int hasEaten = 0;
+
 		//Controle da velocidade do jogo
 		iteraction++;
 		if(iteraction % 4 == 0){
 			wait.tv_nsec = ((wait.tv_nsec - 50000000) * .95) + 50000000;
+			mouse = newMouse(mouse,map,mapHeight,mapWidth,16,snake);
 		}
 
 		dir = gameControl(dir);
@@ -62,9 +69,16 @@ int startLevel(int lvl){
 
 		//ATUALIZA POSIÇÃO DO CORPO DA COBRA
 		moveSnake(snake,dir,mapWidth,mapHeight);
+
+		mouse = eatMouse(mouse,&hasEaten,snake->x,snake->y);
+		destroyLastMouse(mouse);
+
+		if(hasEaten){
+			increaseSnake(snake,1);
+		}
 			
 		//DESENHA A TELA
-		refreshScreen(gamescr,snake,map,mapWidth,mapHeight);
+		refreshScreen(gamescr,snake,mouse,map,mapWidth,mapHeight);
 		
 		//Espera para próxima iteração
 		nanosleep(&wait,NULL);

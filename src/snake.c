@@ -3,8 +3,6 @@
 #include <curses.h>
 #include <time.h>
 
-#include "grf_snake_lib.h"
-#include "grf_draw_lib.h"
 #include "grf_control_lib.h"
 
 #define SNAKE_SIZE 5

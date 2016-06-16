@@ -28,12 +28,17 @@ void destroyLastMouse(Mouse* mouse){
 		//stores second to last mouse(aka new last mouse)
 		Mouse *previous = NULL;
 
+		mouse->time--;
+
 		//go last mouse in the list
 		while(mouse->next != NULL){
 
 			previous = mouse;
+			
 
-			mouse= mouse->next;
+			mouse = mouse->next;
+
+			mouse->time--;
 		}
 
 		//if the mouse's life is over
@@ -46,8 +51,25 @@ void destroyLastMouse(Mouse* mouse){
 	}
 }
 
+Mouse* eatMouse(Mouse* mouse,int* hasEaten,int x, int y){
+	Mouse *next = NULL, *returnValue = NULL;
 
-void newMouse(Mouse* mouselist, char** map, int height, int width, int time, Snake* snake){
+	if(mouse == NULL){
+		returnValue = NULL;
+	}else if(mouse->x == x && mouse->y == y){
+		next = mouse->next;
+		free(mouse);
+		*hasEaten = 1;
+		returnValue = next;
+	}else{
+		mouse->next = eatMouse(mouse->next,hasEaten,x,y);
+		returnValue = mouse;
+	}
+
+	return returnValue;
+}
+
+Mouse* newMouse(Mouse* mouselist, char** map, int height, int width, int time, Snake* snake){
 	//create new node
 	Mouse *mouse = malloc(sizeof(Mouse));
 	//point to given list
@@ -68,13 +90,16 @@ void newMouse(Mouse* mouselist, char** map, int height, int width, int time, Sna
 		//if position doesn't match anything already on the map
 		if ((map[mouse->y][mouse->x] == '#') ||\
 			(map[mouse->y][mouse->x] == '*') ||\
-		      	isSnake(snake, mouse->x, mouse->y) ||\
-		       	isMouse(mouselist, mouse->x, mouse->y)){
+		      	isSnake(snake, mouse->x, mouse->y)){
+		//       	isMouse(mouselist, mouse->x, mouse->y)){
 			
 			isValid = 1;
 		}
 
 
 	} while (isValid);
-
+	
+	return mouse;
 }
+
+

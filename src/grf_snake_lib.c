@@ -65,8 +65,13 @@ void destroySnake(Snake *head){
 
 void moveSnake(Snake *head,int dir,int xSize,int ySize){
 	
-	decreaseSnake(head);
-	increaseSnake(head,0);
+	if(dir == _RIGHT_ ||\
+	   dir == _LEFT_ ||\
+	   dir == _UP_ ||\
+	   dir == _DOWN_){
+		decreaseSnake(head);
+		increaseSnake(head,0);
+	}
 	
 	switch(dir){
 		case _RIGHT_:
@@ -87,8 +92,7 @@ void moveSnake(Snake *head,int dir,int xSize,int ySize){
 		case _DOWN_:
 			head->y = (head->y + 1) % ySize;
 			break;
-		//default:
-	}			
+	}
 }
 
 	

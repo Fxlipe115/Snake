@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "grf_snake_lib.h"
+#include "hsb_mouse_lib.h"
 
 //Carrega o mapa do arquivo "filename" e o retorna como um array de strings e informa por referência a altura e largura do mesmo
 char** loadMap(char* filename,int* width,int* height){
@@ -40,7 +41,7 @@ void destroyMap(char** map,int height){
 }
 
 //Imprime a tela com todos os elementos nela
-void refreshScreen(WINDOW *window,Snake *snake,char **map,int matrixSize,int matrixySize){
+void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matrixSize,int matrixySize){
 	//DESENHA A TELA
 	//initscr();
 	start_color();
@@ -49,9 +50,10 @@ void refreshScreen(WINDOW *window,Snake *snake,char **map,int matrixSize,int mat
 	init_pair(2,COLOR_WHITE,COLOR_BLACK);//score
 	init_pair(3,COLOR_WHITE,COLOR_WHITE);//map
 	init_pair(4,COLOR_BLACK,COLOR_BLACK);//wall
-	init_pair(5,COLOR_RED,COLOR_RED);//food
+	init_pair(5,COLOR_RED,COLOR_RED);//food eaten
 	init_pair(6,COLOR_GREEN,COLOR_GREEN);//body
-	init_pair(7,COLOR_YELLOW,COLOR_YELLOW);//head
+	init_pair(7,COLOR_GREEN,COLOR_GREEN);//head
+	init_pair(8,COLOR_YELLOW,COLOR_YELLOW);//mouse
 	wmove(window,0,0);
 
 	wbkgd(window,COLOR_PAIR(1));	
@@ -77,6 +79,11 @@ void refreshScreen(WINDOW *window,Snake *snake,char **map,int matrixSize,int mat
 				wattron(window,COLOR_PAIR(6));
 				wprintw(window,"  ");
 				wattroff(window,COLOR_PAIR(6));
+			}else if(isMouse(mouse,x,y)){
+				//mouse
+				wattron(window,COLOR_PAIR(8));
+				wprintw(window,"  ");
+				wattroff(window,COLOR_PAIR(8));
 			}else if(map[y][x] == '#'){
 				//wall
 				wattron(window,COLOR_PAIR(4));
