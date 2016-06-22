@@ -54,9 +54,9 @@ void scoreScreen(){
 	WINDOW* scorescr = newwin(0,0,0,0);
 
 	start_color();
-	init_pair(0,COLOR_BLACK,COLOR_RED);//bkgd
-	init_pair(1,COLOR_WHITE,COLOR_BLACK);//text
-	wbkgd(scorescr,COLOR_PAIR(0));
+	init_pair(1,COLOR_BLACK,COLOR_GREEN);//bkgd
+	init_pair(2,COLOR_WHITE,COLOR_BLACK);//text
+	wbkgd(scorescr,COLOR_PAIR(1));
 
 	wmove(scorescr,0,0);
 
@@ -64,10 +64,10 @@ void scoreScreen(){
 	getScores(scores);
 
 	for(int i = 0; i < 10; i++){
-		wattron(scorescr,COLOR_PAIR(1));
+		wattron(scorescr,COLOR_PAIR(2));
 		mvwprintw(scorescr,i+1,1,"%s",scores[i].name);
-		mvwprintw(scorescr,i+1,22,"%d",scores[i].score);
-		wattroff(scorescr,COLOR_PAIR(1));
+		mvwprintw(scorescr,i+1,22,"|%03d",scores[i].score);
+		wattroff(scorescr,COLOR_PAIR(2));
 	}
 
 	mvwprintw(scorescr,22,0,"Pressione qualquer tecla para sair.");
