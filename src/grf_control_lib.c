@@ -8,6 +8,7 @@
 #include "hsb_mouse_lib.h"
 #include "grf_control_lib.h"
 #include "grf_draw_lib.h"
+#include "grf_scores_lib.h"
 
 #define SNAKE_SIZE 5
 
@@ -144,7 +145,7 @@ void menuControl(){
 						break;
 					//Highscores
 					case 2:
-						//TODO
+						scoreScreen();
 						break;
 					//Quit
 					case 3:

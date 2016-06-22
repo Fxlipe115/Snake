@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <ctype.h>
 #include <curses.h>
+#include <stdlib.h>
 #include <time.h>
 
 #include "grf_control_lib.h"
@@ -10,6 +10,8 @@
 
 int main(){
 	printf("Snake started.\n\n");
+
+	srand(time(NULL));
 
 	//Inicia ncurses
 	initscr();
