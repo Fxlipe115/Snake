@@ -27,8 +27,8 @@ char** loadMap(char* filename,int* width,int* height){
 		}
 		
 		mapa = map;
+		fclose(mapfile);
 	}
-	fclose(mapfile);
 
 	return mapa;
 }

@@ -25,10 +25,13 @@ void increaseSnake(Snake *head,int food){
 
 void decreaseSnake(Snake *head){
 	if(getSnakeSize(head) > 1){
-		while(head->next->next != NULL){
+		Snake* snake = head->next;
+;
+		while(snake->next != NULL){
 			head = head->next;
+			snake = head->next;
 		}
-		free(head->next);
+		free(snake);
 		head->next = NULL;
 	}   
 }
@@ -98,6 +101,8 @@ void moveSnake(Snake *head,int dir,int xSize,int ySize){
 	
 int isSnake(Snake *head,int x,int y){
 	int isSnake = 0;
+
+	head = head->next;
 
 	while(head != NULL && isSnake == 0){
 

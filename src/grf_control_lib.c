@@ -9,6 +9,7 @@
 #include "grf_control_lib.h"
 #include "grf_draw_lib.h"
 #include "grf_scores_lib.h"
+#include "grf_collisions_lib.h"
 
 #define SNAKE_SIZE 5
 
@@ -46,11 +47,13 @@ int startLevel(int lvl){
 	//Create mouse list
 	Mouse *mouse = NULL;
 
+	int isDead = 0;
+	
 	//MOVIMENTAÇÃO
 	do{
 		int hasEaten = 0;
 
-		//Controle da velocidade do jogo
+		//Game speed control
 		iteraction++;
 		if(iteraction % mapHeight == 0){
 			wait.tv_nsec = ((wait.tv_nsec - 70000000) * .95) + 70000000;
@@ -59,24 +62,41 @@ int startLevel(int lvl){
 
 		dir = gameControl(dir);
 		
-		//Pausa
-		//TODO passar pra uma função
+		//Pause
 		if(dir == 'P'){
 			do{
 				dir = getch();
 			}while(dir == ERR);
 			ungetch(dir);
-}
+			continue;
+		}
 
-		//ATUALIZA POSIÇÃO DO CORPO DA COBRA
+		//Update snake position
 		moveSnake(snake,dir,mapWidth,mapHeight);
 
+		//Tries to eat mouse and changes hasEaten status on success
 		mouse = eatMouse(mouse,&hasEaten,snake->x,snake->y);
+		//Destroy one mouse when its time is 0
 		destroyLastMouse(mouse);
 
+		//Increase snake size and update status
 		if(hasEaten){
 			increaseSnake(snake,1);
 			score += (lvl+1);
+		}
+
+		//Checks collision with rock
+		if(rockCollision(map,snake->x,snake->y)){
+			decreaseSnake(snake);
+			if(score > 0){
+				score--;
+			}
+		}
+
+		//Checks collision with wall, itself or insufficient size
+		if(wallCollision(map,snake->x,snake->y) || snakeCollision(snake) || (getSnakeSize(snake) < 2)){
+			isDead = 1;
+			//lives--;
 		}
 			
 		//DESENHA A TELA
@@ -85,7 +105,7 @@ int startLevel(int lvl){
 		//Espera para próxima iteração
 		nanosleep(&wait,NULL);
 		
-	}while(dir != 'Q');
+	}while(dir != 'Q' && !isDead);
 
 	destroyMap(map,mapHeight);
 
@@ -96,10 +116,6 @@ int startLevel(int lvl){
 	destroySnake(snake);
 	
 	return score;
-}
-
-void startMenu(){
-	
 }
 
 void menuControl(){
