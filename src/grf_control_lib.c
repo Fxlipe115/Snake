@@ -11,17 +11,12 @@
 #include "grf_scores_lib.h"
 #include "grf_collisions_lib.h"
 
-#define SNAKE_SIZE 5
-
-int startLevel(int lvl, int lives, int* isGameOver){
+int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver){
 	//Game window
 	WINDOW *gamescr = newwin(0,0,0,0);
 	nodelay(gamescr,TRUE);
 	keypad(gamescr,TRUE);
 	noecho();
-
-	//Score
-	int score = 0;
 
 	//Initial direction of snake
 	int dir = _RIGHT_;
@@ -42,7 +37,9 @@ int startLevel(int lvl, int lives, int* isGameOver){
 	char **map = loadMap(mapfile,&mapWidth,&mapHeight);
 
 	//Create snake
-	Snake *snake = newSnake(SNAKE_SIZE,mapWidth/2,mapHeight/2);
+	int xpos = 0,ypos = 0;
+	getInitPos(map,mapWidth,mapHeight,&xpos,&ypos);
+	Snake *snake = newSnake(snakeSize,xpos,ypos);
 
 	//Create mouse list
 	Mouse *mouse = NULL;
@@ -99,19 +96,24 @@ int startLevel(int lvl, int lives, int* isGameOver){
 		//Checks collision with wall, itself or insufficient size
 		if(wallCollision(map,snake->x,snake->y) || snakeCollision(snake) || (getSnakeSize(snake) < 2)){
 			isDead = 1;
-			lives--;
-			if(lives == 0){
-				isGameOver = 1;
+			--*lives;
+			if(*lives == 0){
+				*isGameOver = 1;
 			}
+		}
+
+		if(dir == 'Q'){
+			isDead = 1;
+			*isGameOver = 1;
 		}
 			
 		//DESENHA A TELA
-		refreshScreen(gamescr,snake,mouse,map,mapWidth,mapHeight,score);
+		refreshScreen(gamescr,snake,mouse,map,mapWidth,mapHeight,score,*lives);
 		
 		//Espera para próxima iteração
 		nanosleep(&wait,NULL);
 		
-	}while(dir != 'Q' && !isDead);
+	}while(!isDead);
 
 	destroyMap(map,mapHeight);
 
@@ -159,11 +161,11 @@ void menuControl(){
 				switch(option){
 					//New Game
 					case 0:
-						startLevel(0);
+						levelControl();
 						break;
 					//Select Level
 					case 1:
-						startLevel(1);
+						//startLevel(1);
 						break;
 					//Highscores
 					case 2:
@@ -229,12 +231,23 @@ int gameControl(int dir,int* isPaused){
 	return dir;
 }
 
-void pause(int key){
-	if(key == 'P'){
-		do{
-			key = getch();
-		}while(key == ERR);
-		//ungetch(dir);
-		//continue;
+void levelControl(){
+	int isGameOver = 0;
+	int lives = 3;
+	int score = 0;
+
+	while(!isGameOver){
+		score = startLevel(0,score,5,&lives,&isGameOver);
+	}
+}
+
+void getInitPos(char** map,int width,int height,int* xpos,int* ypos){
+	for(int y = 0; y < height; y++){
+		for(int x = 0; x < width; x++){
+			if(map[y][x] == 'o'){
+				*xpos = x;
+				*ypos = y;
+			}
+		}
 	}
 }

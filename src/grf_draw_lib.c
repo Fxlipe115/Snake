@@ -41,7 +41,7 @@ void destroyMap(char** map,int height){
 }
 
 //Imprime a tela com todos os elementos nela
-void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matrixSize,int matrixySize,int score){
+void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matrixSize,int matrixySize,int score,int lives){
 	//DESENHA A TELA
 	//initscr();
 	start_color();
@@ -60,12 +60,17 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matri
 	wbkgd(window,COLOR_PAIR(1));	
 
 	wattron(window,COLOR_PAIR(2));
-	wprintw(window,"Score: %d\n",score);
+	wprintw(window,"Score: %d  Lives: %d\n",score,lives);
 	wattroff(window,COLOR_PAIR(2));
 
 	for(int y = 0; y<matrixySize; y++){
 		for(int x = 0; x<matrixSize; x++){
-			if(snake->y == y && snake->x == x){
+			if(map[y][x] == '#'){
+				//wall
+				wattron(window,COLOR_PAIR(4));
+				wprintw(window,"  ");
+				wattroff(window,COLOR_PAIR(4));
+			}else if(snake->y == y && snake->x == x){
 				//head
 				wattron(window,COLOR_PAIR(7)|A_BOLD);
 				wprintw(window,"00");
@@ -85,11 +90,6 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matri
 				wattron(window,COLOR_PAIR(8)|A_BOLD);
 				wprintw(window,"~>");
 				wattroff(window,COLOR_PAIR(8)|A_BOLD);
-			}else if(map[y][x] == '#'){
-				//wall
-				wattron(window,COLOR_PAIR(4));
-				wprintw(window,"  ");
-				wattroff(window,COLOR_PAIR(4));
 			}else if(map[y][x] == '*'){
 				//rocks
 				wattron(window,COLOR_PAIR(9));
