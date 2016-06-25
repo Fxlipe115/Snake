@@ -24,17 +24,19 @@ int rockCollision(char** map, int x, int y){
 int snakeCollision(Snake* snake){
 	int status = 0;
 
-	Snake* head = snake;
-	snake = snake->next->next;
+	if(getSnakeSize(snake) > 4){
+		Snake* head = snake;
+		snake = snake->next->next->next->next;
 
-	while(snake != NULL && status == 0){
+		while(snake != NULL && status == 0){
 
-		int position = ((snake->x == head->x) && (snake->y == head->y));
+			int position = ((snake->x == head->x) && (snake->y == head->y));
 
-		if(position){
-			status = 1;
+			if(position){
+				status = 1;
+			}
+			snake = snake->next;
 		}
-		snake = snake->next;
 	}
 	return status;
 }

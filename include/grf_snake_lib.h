@@ -1,7 +1,7 @@
 #ifndef GRF_SNAKE_LIB_H
 # define GRF_SNAKE_LIB_H
 
-//Macros de direção para a função moveSnake()
+//Direction macros for funtion moveSnake()
 #define _RIGHT_ 0
 #define _UP_ 90
 #define _LEFT_ 180

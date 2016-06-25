@@ -13,7 +13,7 @@
 
 #define SNAKE_SIZE 5
 
-int startLevel(int lvl){
+int startLevel(int lvl, int lives, int* isGameOver){
 	//Game window
 	WINDOW *gamescr = newwin(0,0,0,0);
 	nodelay(gamescr,TRUE);
@@ -31,7 +31,7 @@ int startLevel(int lvl){
 	wait.tv_sec = 0;
 	wait.tv_nsec = 999999999L;
 
-	//Number of iteraction for mouse creation/destruction control
+	//Number of iteraction for mouse creation control
 	unsigned int iteraction = 0;
 
 	//Map loading
@@ -48,6 +48,8 @@ int startLevel(int lvl){
 	Mouse *mouse = NULL;
 
 	int isDead = 0;
+
+	int isPaused = 0;
 	
 	//MOVIMENTAÇÃO
 	do{
@@ -60,14 +62,15 @@ int startLevel(int lvl){
 			mouse = newMouse(mouse,map,mapHeight,mapWidth,mapHeight*4,snake);
 		}
 
-		dir = gameControl(dir);
-		
+		dir = gameControl(dir,&isPaused);
+
 		//Pause
-		if(dir == 'P'){
+		if(isPaused){
+			int key;
 			do{
-				dir = getch();
-			}while(dir == ERR);
-			ungetch(dir);
+				key = getch();
+			}while(key == ERR);
+			isPaused = 0;
 			continue;
 		}
 
@@ -96,7 +99,10 @@ int startLevel(int lvl){
 		//Checks collision with wall, itself or insufficient size
 		if(wallCollision(map,snake->x,snake->y) || snakeCollision(snake) || (getSnakeSize(snake) < 2)){
 			isDead = 1;
-			//lives--;
+			lives--;
+			if(lives == 0){
+				isGameOver = 1;
+			}
 		}
 			
 		//DESENHA A TELA
@@ -175,32 +181,32 @@ void menuControl(){
 	delwin(menuscr);
 }
 
-int gameControl(int dir){
+int gameControl(int dir,int* isPaused){
 	int key = getch();
 	
 	if(key != ERR){
 		switch(toupper(key)){
 			case 'W':
 			case KEY_UP:
-				if(dir != _DOWN_){
+				if(dir == _LEFT_ || dir == _RIGHT_){
 					dir = _UP_;
 				}
 				break;
 			case 'A':
 			case KEY_LEFT:
-				if(dir != _RIGHT_){
+				if(dir == _UP_ || dir == _DOWN_){
 					dir = _LEFT_;
 				}
 				break;
 			case 'S':
 			case KEY_DOWN:
-				if(dir != _UP_){
+				if(dir == _LEFT_ || dir == _RIGHT_){
 					dir = _DOWN_;
 				}
 				break;
 			case 'D':
 			case KEY_RIGHT:
-				if(dir != _LEFT_){
+				if(dir == _UP_ || dir == _DOWN_){
 					dir = _RIGHT_;
 				}
 				break;
@@ -212,7 +218,7 @@ int gameControl(int dir){
 //					decreaseSnake(snake);
 //				break;
 			case 'P':
-				dir = 'P';
+				*isPaused = 1;
 				break;
 			case 'Q':
 			case KEY_ESC:
@@ -221,4 +227,14 @@ int gameControl(int dir){
 		}
 	}
 	return dir;
+}
+
+void pause(int key){
+	if(key == 'P'){
+		do{
+			key = getch();
+		}while(key == ERR);
+		//ungetch(dir);
+		//continue;
+	}
 }

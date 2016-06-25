@@ -1,6 +1,8 @@
 #ifndef HSB_RATS_LIB
 #define HSB_RATS_LIB 
 
+#include "grf_snake_lib.h"
+
 typedef struct mouse{
 
 int time;
