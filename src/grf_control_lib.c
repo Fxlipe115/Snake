@@ -131,6 +131,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 			//End level
 			isDead = 1;
 			*levelFinished = 1;
+			score += 10;
 		}
 			
 		//Draws screen
