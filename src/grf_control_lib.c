@@ -11,6 +11,8 @@
 #include "grf_scores_lib.h"
 #include "grf_collisions_lib.h"
 
+#define LEVELS_NUMBER 7
+
 int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver){
 	//Game window
 	WINDOW *gamescr = newwin(0,0,0,0);
@@ -188,7 +190,7 @@ void menuControl(){
 						break;
 					//Select Level
 					case 1:
-						//startLevel(1);
+						chooseLevel();
 						break;
 					//Highscores
 					case 2:
@@ -279,7 +281,7 @@ void getPlayerData(int score){
 
 	drawPlayerData(pdscr,score);
 
-	mvwscanw(pdscr,7,5,"%s",player.name);
+	mvwscanw(pdscr,7,17,"%s",player.name);
 	player.score = score;
 
 	updateScore(player);
@@ -297,3 +299,65 @@ void getInitPos(char** map,int width,int height,int* xpos,int* ypos){
 		}
 	}
 }
+
+void chooseLevel(){
+	WINDOW *levelsscr = newwin(0,0,0,0);
+	int level = 0;
+	int exit = 0;
+	int lives = 1;
+	int isGameOver = 0;
+
+	do{
+		start_color();
+		init_pair(1,COLOR_WHITE,COLOR_BLACK);
+		wbkgd(levelsscr,COLOR_PAIR(1));
+
+		keypad(levelsscr,TRUE);
+		noecho();
+
+		wmove(levelsscr,0,0);
+		for(int i = 0; i < LEVELS_NUMBER; i++){
+			if(level == i){
+				wattron(levelsscr,A_REVERSE);
+				wprintw(levelsscr,"-LEVEL %d\n",i+1);
+				wattroff(levelsscr,A_REVERSE);
+			}else{
+				wprintw(levelsscr," LEVEL %d\n",i+1);
+			}
+		}
+		wprintw(levelsscr,"\nPressione ESC para voltar");
+		
+		wrefresh(levelsscr);
+
+		int key;
+		do{
+			 key = getch();
+		}while(key == ERR);
+
+		switch(toupper(key)){
+			case 'W':
+			case KEY_UP:
+				level--;
+				if(level < 0){
+					level++;
+				}
+				break;
+			case 'S':
+			case KEY_DOWN:
+				level++;
+				if(level > LEVELS_NUMBER - 1){
+					level--;
+				}
+				break;
+			case '\n':
+				startLevel(level,0,5,&lives,&isGameOver);
+				break;
+			case KEY_ESC:
+				exit = 1;
+				break;
+		}
+	}while(!exit);
+
+	delwin(levelsscr);
+}
+

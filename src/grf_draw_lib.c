@@ -47,20 +47,33 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **
 
 	init_pair(1,COLOR_MAGENTA,COLOR_MAGENTA);//background
 	init_pair(2,COLOR_WHITE,COLOR_BLACK);//score
-	init_pair(3,COLOR_WHITE,COLOR_WHITE);//map
-	init_pair(4,COLOR_BLACK,COLOR_BLACK);//wall
-	init_pair(5,COLOR_BLACK,COLOR_GREEN);//food eaten
-	init_pair(6,COLOR_GREEN,COLOR_GREEN);//body
-	init_pair(7,COLOR_BLACK,COLOR_GREEN);//head
-	init_pair(8,COLOR_BLACK,COLOR_WHITE);//mouse
-	init_pair(9,COLOR_RED,COLOR_WHITE);//rock/apple
-	init_pair(10,COLOR_GREEN,COLOR_WHITE);//apple leaf
+
+	if(matrixySize==27){
+		init_pair(3,COLOR_BLACK,COLOR_BLACK);
+		init_pair(4,COLOR_BLUE,COLOR_BLUE);
+		init_pair(5,COLOR_BLACK,COLOR_BLACK);
+		init_pair(6,COLOR_BLACK,COLOR_BLACK);
+		init_pair(7,COLOR_BLACK,COLOR_YELLOW);
+		init_pair(8,COLOR_YELLOW,COLOR_BLACK);
+		init_pair(9,COLOR_RED,COLOR_BLACK);
+		init_pair(10,COLOR_GREEN,COLOR_BLACK);
+	}else{
+		init_pair(3,COLOR_WHITE,COLOR_WHITE);//map
+		init_pair(4,COLOR_BLACK,COLOR_BLACK);//wall
+		init_pair(5,COLOR_BLACK,COLOR_GREEN);//food eaten
+		init_pair(6,COLOR_GREEN,COLOR_GREEN);//body
+		init_pair(7,COLOR_BLACK,COLOR_GREEN);//head
+		init_pair(8,COLOR_BLACK,COLOR_WHITE);//mouse
+		init_pair(9,COLOR_RED,COLOR_WHITE);//rock/apple
+		init_pair(10,COLOR_GREEN,COLOR_WHITE);//apple leaf
+	}
+
 	wmove(window,0,0);
 
 	wbkgd(window,COLOR_PAIR(1));	
 
 	wattron(window,COLOR_PAIR(2));
-	wprintw(window,"Score: %03d  Lives: %d  Mice eaten: %0d/10\n",score,lives,miceEaten);
+	wprintw(window,"Score: %03d  Lives: %d  ~>: %0d/10\n",score,lives,miceEaten);
 	wattroff(window,COLOR_PAIR(2));
 
 	for(int y = 0; y<matrixySize; y++){
@@ -77,9 +90,9 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **
 				wattroff(window,COLOR_PAIR(7)|A_BOLD);
 			}else if(hasFood(snake,x,y)){
 				//food eaten
-				wattron(window,COLOR_PAIR(5)|A_BOLD);
+				wattron(window,COLOR_PAIR(5));
 				wprintw(window,"()");
-				wattroff(window,COLOR_PAIR(5)|A_BOLD);
+				wattroff(window,COLOR_PAIR(5));
 			}else if(isSnake(snake,x,y)){
 				//body
 				wattron(window,COLOR_PAIR(6));
@@ -96,12 +109,12 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **
 				wprintw(window,"~");
 				wattroff(window,COLOR_PAIR(10));
 				wattron(window,COLOR_PAIR(9));
-				wprintw(window,"0");
+				wprintw(window,"@");
 				wattroff(window,COLOR_PAIR(9));
 			}else if(map[y][x] == '*'){
 				//rocks
 				wattron(window,COLOR_PAIR(9));
-				wprintw(window,"@@");
+				wprintw(window,"{}");
 				wattroff(window,COLOR_PAIR(9));
 			}else{
 				//map background
@@ -145,7 +158,8 @@ void drawPlayerData(WINDOW* window, int score){
 	init_pair(1,COLOR_WHITE,COLOR_MAGENTA);
 	wbkgd(window,COLOR_PAIR(1));
 
-	mvwprintw(window,5,5,"Your score: %d",score);
+	mvwprintw(window,5,5,"Your score: %03d",score);
+	mvwprintw(window,7,5,"Your name:  ");
 
 	wrefresh(window);
 }
