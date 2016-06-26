@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <curses.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "grf_scores_lib.h"
 
@@ -99,4 +100,21 @@ void scoreScreen(int isHighscore){
 	}while(k == ERR);
 
 	free(scores);
+}
+
+void clearScores(){
+	FILE* fp = fopen("highscores.bin","wb");
+
+	if(fp != NULL){
+		Score score[SCORES_NUMBER];
+
+		for(int i = 0; i < SCORES_NUMBER; i++){
+			strcpy(score[i].name,"-----");
+			score[i].score = 0;
+		}
+		
+		fwrite(score,sizeof(Score),15,fp);
+
+		fclose(fp);
+	}
 }

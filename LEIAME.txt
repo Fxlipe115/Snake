@@ -1,0 +1,53 @@
+----------------------Snake----------------------
+
+Trabalho final da cadeira INF01202-Algorítmos e Programação
+
+Autores:
+	Felipe de Almeida Graeff  (cartão: 00261606)
+	Henrique da Silva Barboza (cartão: 00272730)
+
+
+-----------Instruções para compilação-----------
+
+Esse jogo foi feito para Linux e precisa da biblioteca Ncurses instalada para compilação.
+
+Para instalar Ncurses digite `sudo apt-get install libncurses5-dev` no terminal.
+
+Para compilar digite `make && make clean` no terminal dentro da pasta "Snake/".
+
+Digite `./snake` para rodar.
+
+Para zerar os highscores execute com a opção -c ou --clear.
+
+
+-------Descrição das estruturas de dados-------
+
+	A cobra e os ratos são representados como listas simplesmente encadeadas.
+Isso se deve à maior facilidade na manipulação dos dados, visto que ambas são estruturas 
+que possuem uma quantidade de elementos que varia no decorrer do jogo. 
+
+	Se tratando da cobra isso também facilita a movimentação, uma vez que só duas partes 
+da cobra efetivamente se alteram na tela a cada movimento, a cauda e a cabeça, com todos os 
+outros pedaços ficando no mesmo lugar. Na prática isso significa que na nossa implementação 
+do movimento da cobra o última elemento da lista que forma a cobra é excluído, é criado um 
+novo elemento na segunda posição da lista com as mesmas coordenadas da cabeça e por fim é 
+alterada a posição x ou y da cabeça dependendo do comando dado pelo jogador.
+
+	Quanto aos ratos o fato de se poder remover um elemento em um posição arbitrária da 
+lista permite à cobra comer os ratos em uma ordem diferente da que eles surgem na tela sem 
+muito trabalho adicional para a manipulação dos dados.
+
+	Para a mação foi usada uma "struct" simples com uma coordenada x e uma y. O tratamento 
+dado a ela na criação foi o mesmo dado aos ratos. É fornecida uma posição xy aleatória e depois 
+avaliada se a posição coincide com algum outro elemento do mapa ou a cobra. Caso coincida é 
+fornecida uma nova posição até que a maçã caia em uma posição desocupada.
+
+	O mapa lido do arquivo de texto é armazenado em uma matriz de caracteres alocada 
+dinamicamente de acordo com a altura e largura do mapa fornecidos na primeira linha do arquivo. 
+Essa matriz é então usada para várias verificações, como a já citada na criação da maçã e dos 
+ratos, e para a impressão dos elementos na tela.
+
+	Os scores são armazenados em uma estrutura que contém o nome do jogador e sua pontuação. 
+Na leitura dos recordes do arquivo esses são armazenados em um array dessa estrutura para 
+verificação e manipulação. Tanto na leitura quanto na gravação são lidos ou gravados todos os 
+dados de uma só vez, usando-se o array já citado.

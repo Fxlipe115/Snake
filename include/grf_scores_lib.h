@@ -12,4 +12,6 @@ int updateScore(Score score);
 
 void scoreScreen(int isHighscore);
 
+void clearScores();
+
 #endif
