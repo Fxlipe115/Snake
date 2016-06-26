@@ -158,8 +158,42 @@ void drawPlayerData(WINDOW* window, int score){
 	init_pair(1,COLOR_WHITE,COLOR_MAGENTA);
 	wbkgd(window,COLOR_PAIR(1));
 
+	mvwprintw(window,2,8,"Game Over!");
 	mvwprintw(window,5,5,"Your score: %03d",score);
 	mvwprintw(window,7,5,"Your name:  ");
 
 	wrefresh(window);
+}
+
+void instructionsScreen(){
+	WINDOW* window = newwin(0,0,0,0);
+
+	start_color();
+	init_pair(1,COLOR_BLACK,COLOR_BLUE);//bkgd
+	init_pair(2,COLOR_WHITE,COLOR_BLACK);//text
+	wbkgd(window,COLOR_PAIR(1));
+
+	wmove(window,0,0);
+
+	wattron(window,COLOR_PAIR(2));
+
+	mvwprintw(window,0,0,"-----------INSTRUCTIONS-----------");
+	mvwprintw(window,1,0,"**********************************");
+	mvwprintw(window,2,0,"* W,A,S,D or arrow keys to move. *");
+	mvwprintw(window,3,0,"*                                *");
+	mvwprintw(window,4,0,"* P to pause.                    *");
+	mvwprintw(window,5,0,"*                                *");
+	mvwprintw(window,6,0,"* ESC or Q to quit game.         *");
+	mvwprintw(window,7,0,"**********************************");
+
+	mvwprintw(window,10,2,"Press any key to exit.");
+
+	wattroff(window,COLOR_PAIR(2));
+
+	wrefresh(window);
+
+	int k;
+	do{
+		k = getch();
+	}while(k == ERR);
 }

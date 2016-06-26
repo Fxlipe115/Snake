@@ -52,7 +52,7 @@ int updateScore(Score score){
 	return isHighscore;
 }
 
-void scoreScreen(){
+void scoreScreen(int isHighscore){
 	WINDOW* scorescr = newwin(0,0,0,0);
 
 	start_color();
@@ -72,7 +72,16 @@ void scoreScreen(){
 		wattroff(scorescr,COLOR_PAIR(2));
 	}
 
-	mvwprintw(scorescr,22,0,"Pressione qualquer tecla para sair.");
+	switch(isHighscore){
+		case 0:
+			mvwprintw(scorescr,20,2,"You did not make it to the top 15. :'\(");
+			break;
+		case 1:
+			mvwprintw(scorescr,20,2,"HIGHSCORE!!!");
+			break;
+	}
+
+	mvwprintw(scorescr,22,0,"Press any key to exit.");
 	
 	wrefresh(scorescr);
 

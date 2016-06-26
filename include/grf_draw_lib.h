@@ -17,4 +17,6 @@ void drawMenu(WINDOW* menu,int option);
 
 void drawPlayerData(WINDOW* window,int score);
 
+void instructionsScreen();
+
 #endif

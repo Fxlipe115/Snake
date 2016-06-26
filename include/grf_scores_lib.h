@@ -10,6 +10,6 @@ void getScores(Score* scores);
 
 int updateScore(Score score);
 
-void scoreScreen();
+void scoreScreen(int isHighscore);
 
 #endif

@@ -13,7 +13,7 @@
 
 #define LEVELS_NUMBER 7
 
-int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver){
+int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, int* levelFinished){
 	//Game window
 	WINDOW *gamescr = newwin(0,0,0,0);
 	nodelay(gamescr,TRUE);
@@ -56,7 +56,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver){
 	int isDead = 0;
 	int isPaused = 0;
 	
-	//MOVIMENTAÇÃO
+	//Game loop
 	do{
 		int hasEaten = 0;
 
@@ -130,6 +130,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver){
 		if(eatApple(apple,snake->x,snake->y)){
 			//End level
 			isDead = 1;
+			*levelFinished = 1;
 		}
 			
 		//Draws screen
@@ -194,11 +195,11 @@ void menuControl(){
 						break;
 					//Highscores
 					case 2:
-						scoreScreen();
+						scoreScreen(-1);
 						break;
 					//Instructions
 					case 3:
-						//TODO
+						instructionsScreen();
 						break;
 					//Quit
 					case 4:
@@ -261,16 +262,21 @@ int gameControl(int dir,int* isPaused){
 }
 
 void levelControl(){
-	int curlevel = 1;
+	int curlevel = 0;
 	int isGameOver = 0;
 	int lives = 3;
 	int score = 0;
 
-	while(!isGameOver){
-		score = startLevel(curlevel,score,5,&lives,&isGameOver);
-	}
+	while(curlevel < LEVELS_NUMBER && !isGameOver){
+		int levelFinished = 0;
+
+		while(!isGameOver && !levelFinished){
+			score = startLevel(curlevel,score,5,&lives,&isGameOver,&levelFinished);
+		}
 	
-	getPlayerData(score);	
+		curlevel++;
+	}
+	getPlayerData(score);
 }
 
 void getPlayerData(int score){
@@ -284,9 +290,11 @@ void getPlayerData(int score){
 	mvwscanw(pdscr,7,17,"%s",player.name);
 	player.score = score;
 
-	updateScore(player);
+	int isHighscore = updateScore(player);
 
 	delwin(pdscr);
+
+	scoreScreen(isHighscore);
 }
 
 void getInitPos(char** map,int width,int height,int* xpos,int* ypos){
@@ -306,6 +314,7 @@ void chooseLevel(){
 	int exit = 0;
 	int lives = 1;
 	int isGameOver = 0;
+	int levelFinished = 0;
 
 	do{
 		start_color();
@@ -350,7 +359,7 @@ void chooseLevel(){
 				}
 				break;
 			case '\n':
-				startLevel(level,0,5,&lives,&isGameOver);
+				startLevel(level,0,5,&lives,&isGameOver,&levelFinished);
 				break;
 			case KEY_ESC:
 				exit = 1;
