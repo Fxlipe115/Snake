@@ -6,6 +6,7 @@
 
 #define SCORES_NUMBER 15
 
+//reds all scores on highscores.bin
 void getScores(Score* scores){
 	FILE *fp = fopen("highscores.bin","rb");
 
@@ -16,17 +17,21 @@ void getScores(Score* scores){
 	}
 }
 
+//receives a score and if it's a highscore puts it on the list of highscores and saves back to the file 
 int updateScore(Score score){
 	int isHighscore = 0;
 
+	//get the scores currently on the file as an array
 	Score *scores = malloc(SCORES_NUMBER * sizeof(Score));
 	getScores(scores);
 
 	FILE *fp = fopen("highscores.bin","wb");
 
+	
 	if(fp != NULL){
 		int index = 0;
-
+		
+		//evaluates if score received is highscore
 		for(int i = 0; i < SCORES_NUMBER && isHighscore == 0; i++){
 			if(score.score >= scores[i].score){
 				index = i;
@@ -34,6 +39,7 @@ int updateScore(Score score){
 			}
 		}
 
+		//case positive, sorts it in the list
 		if(isHighscore){
 			for(int i = SCORES_NUMBER - 1; i > index; i--){
 				scores[i] = scores[i-1];
@@ -52,6 +58,8 @@ int updateScore(Score score){
 	return isHighscore;
 }
 
+//shows highscores
+//if called after puting a score on the list can show a message saying if it was or not a highscore
 void scoreScreen(int isHighscore){
 	WINDOW* scorescr = newwin(0,0,0,0);
 
@@ -74,14 +82,14 @@ void scoreScreen(int isHighscore){
 
 	switch(isHighscore){
 		case 0:
-			mvwprintw(scorescr,20,2,"You did not make it to the top 15. :'\(");
+			mvwprintw(scorescr,18,2,"You did not make it to the top 15. :'\(");
 			break;
 		case 1:
-			mvwprintw(scorescr,20,2,"HIGHSCORE!!!");
+			mvwprintw(scorescr,18,2,"HIGHSCORE!!!");
 			break;
 	}
 
-	mvwprintw(scorescr,22,0,"Press any key to exit.");
+	mvwprintw(scorescr,20,0,"Press any key to exit.");
 	
 	wrefresh(scorescr);
 

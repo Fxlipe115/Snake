@@ -134,7 +134,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 		}
 			
 		//Draws screen
-		refreshScreen(gamescr,snake,mouse,apple,map,mapWidth,mapHeight,score,*lives,miceEaten);
+		refreshScreen(gamescr,snake,mouse,apple,map,mapWidth,mapHeight,lvl,score,*lives,miceEaten);
 		
 		//Wait for next iteration
 		nanosleep(&wait,NULL);
@@ -152,6 +152,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 	return score;
 }
 
+//Receives input, changes the current option and sends it to drawMenu function
 void menuControl(){
 	WINDOW *menuscr = newwin(0,0,0,0);
 	int option = 0;
@@ -184,6 +185,7 @@ void menuControl(){
 				drawMenu(menuscr,option);
 				break;
 			case '\n':
+				//Selects current option
 				switch(option){
 					//New Game
 					case 0:
@@ -216,6 +218,9 @@ void menuControl(){
 int gameControl(int dir,int* isPaused){
 	int key = getch();
 	
+	//Case it's a direction key, evaluates if diretion is valid
+	//case it's 'p' changes isPaused to true
+	//case q or esc returns q for quiting the level
 	if(key != ERR){
 		switch(toupper(key)){
 			case 'W':
@@ -242,13 +247,6 @@ int gameControl(int dir,int* isPaused){
 					dir = _RIGHT_;
 				}
 				break;
-//			case '+':
-//				increaseSnake(snake,1);
-//				break;
-//			case '-':
-//				if(getSnakeSize(snake) > 2)
-//					decreaseSnake(snake);
-//				break;
 			case 'P':
 				*isPaused = 1;
 				break;
@@ -267,9 +265,11 @@ void levelControl(){
 	int lives = 3;
 	int score = 0;
 
+	//This while makes the player advance one level case he beat the last one
 	while(curlevel < LEVELS_NUMBER && !isGameOver){
 		int levelFinished = 0;
 
+		//This one returns to the same level until game over if the player dies
 		while(!isGameOver && !levelFinished){
 			score = startLevel(curlevel,score,5,&lives,&isGameOver,&levelFinished);
 		}
@@ -279,6 +279,7 @@ void levelControl(){
 	getPlayerData(score);
 }
 
+//Gets player name and score and send it to update score function, then calls the highscores screen
 void getPlayerData(int score){
 	WINDOW *pdscr = newwin(0,0,0,0);
 	Score player;
@@ -297,6 +298,7 @@ void getPlayerData(int score){
 	scoreScreen(isHighscore);
 }
 
+//Gets initial x, y position given in the map
 void getInitPos(char** map,int width,int height,int* xpos,int* ypos){
 	for(int y = 0; y < height; y++){
 		for(int x = 0; x < width; x++){
@@ -308,6 +310,7 @@ void getInitPos(char** map,int width,int height,int* xpos,int* ypos){
 	}
 }
 
+//Draws choose level menu and calls the level selected
 void chooseLevel(){
 	WINDOW *levelsscr = newwin(0,0,0,0);
 	int level = 0;
@@ -324,6 +327,7 @@ void chooseLevel(){
 		keypad(levelsscr,TRUE);
 		noecho();
 
+		//Draw level options
 		wmove(levelsscr,0,0);
 		for(int i = 0; i < LEVELS_NUMBER; i++){
 			if(level == i){
@@ -334,10 +338,11 @@ void chooseLevel(){
 				wprintw(levelsscr," LEVEL %d\n",i+1);
 			}
 		}
-		wprintw(levelsscr,"\nPressione ESC para voltar");
+		wprintw(levelsscr,"\nPress ESC to exit");
 		
 		wrefresh(levelsscr);
 
+		//Take care of user input
 		int key;
 		do{
 			 key = getch();
@@ -359,6 +364,7 @@ void chooseLevel(){
 				}
 				break;
 			case '\n':
+				lives = 1;
 				startLevel(level,0,5,&lives,&isGameOver,&levelFinished);
 				break;
 			case KEY_ESC:

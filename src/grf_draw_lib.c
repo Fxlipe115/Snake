@@ -34,6 +34,7 @@ char** loadMap(char* filename,int* width,int* height){
 	return mapa;
 }
 
+//Frees the memory associated with the map matrix
 void destroyMap(char** map,int height){
 	for(int i = 0; i<height; i++){
 		free(map[i]);
@@ -42,7 +43,7 @@ void destroyMap(char** map,int height){
 }
 
 //Prints screen with all elements given in it
-void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int score,int lives,int miceEaten){
+void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int lvl,int score,int lives,int miceEaten){
 	start_color();
 
 	init_pair(1,COLOR_MAGENTA,COLOR_MAGENTA);//background
@@ -73,7 +74,7 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **
 	wbkgd(window,COLOR_PAIR(1));	
 
 	wattron(window,COLOR_PAIR(2));
-	wprintw(window,"Score: %03d  Lives: %d  ~>: %0d/10\n",score,lives,miceEaten);
+	wprintw(window,"Level: %d | Score: %03d | Lives: %d | ~>: %0d/10\n",lvl+1,score,lives,miceEaten);
 	wattroff(window,COLOR_PAIR(2));
 
 	for(int y = 0; y<matrixySize; y++){
@@ -135,23 +136,61 @@ void drawMenu(WINDOW* menu,int option){
 
 	start_color();
 	init_pair(1,COLOR_WHITE,COLOR_BLACK);
+	init_pair(2,COLOR_GREEN,COLOR_BLACK);
 	wbkgd(menu,COLOR_PAIR(1));
 	
 	wmove(menu,0,0);
 
+	wattron(menu,COLOR_PAIR(2));
+
+	//Prints the following ascii art with all the escape sequences
+	/*           ---_ ...... _/_ -    
+	            /  .      ./ .'*\ \
+	            : '         /__-'   \. 
+	           /                      )
+	         _/                  >   .' 
+	       /   .   .       _.-" /  .'   
+	       \           __/"     /.'/|   
+	        \ '--  .-" /     //' |\|  
+	          \|  \ | /     //_ _ |/|
+	           `.  \:     //|_ _ _|\|
+	           | \/.    //  | _ _ |/|
+	            \_ | \/ /    \ _ _ \\\
+	                \__/      \ _ _ \|\  */
+
+	mvwprintw(menu,1,0,"         ---_ ...... _/_ -      ");
+	mvwprintw(menu,2,0,"        /  .      ./ .\'*\\ \\     ");
+	mvwprintw(menu,3,0,"        : \'         /__-\'   \\.  ");
+	mvwprintw(menu,4,0,"       /                      ) ");
+	mvwprintw(menu,5,0,"     _/                  >   .\' ");
+	mvwprintw(menu,6,0,"   /   .   .       _.-\" /  .\'   ");
+	mvwprintw(menu,7,0,"   \\           __/\"     /.\'/|   ");
+	mvwprintw(menu,8,0,"     \\ \'--  .-\" /     //\' |\\|   ");
+	mvwprintw(menu,9,0,"      \\|  \\ | /     //_ _ |/|   ");
+	mvwprintw(menu,10,0,"       `.  \\:     //|_ _ _|\\|   ");
+	mvwprintw(menu,11,0,"       | \\/.    //  | _ _ |/|   ");
+	mvwprintw(menu,12,0,"        \\_ | \\/ /    \\ _ _ \\\\\\  ");
+	mvwprintw(menu,13,0,"            \\__/      \\ _ _ \\|\\ ");
+
+	wattroff(menu,COLOR_PAIR(2));
+
+	//Prints the menu options with the current one highlighted
 	for(int i = 0; i < 5; i++){
 		if(option == i){
 			wattron(menu,A_REVERSE);
-			wprintw(menu,"-%s\n",options[i]);
+			mvwprintw(menu,i+3,36,"-%s",options[i]);
 			wattroff(menu,A_REVERSE);
 		}else{
-			wprintw(menu," %s\n",options[i]);
+			mvwprintw(menu,i+3,36," %s\n",options[i]);
 		}
 	}
+
+	wmove(menu,14,0);
 	
 	wrefresh(menu);
 }
 
+//Screen for asking the player's name before evaluating his score
 void drawPlayerData(WINDOW* window, int score){
 	echo();
 	start_color();
@@ -165,6 +204,7 @@ void drawPlayerData(WINDOW* window, int score){
 	wrefresh(window);
 }
 
+//Instructions screen
 void instructionsScreen(){
 	WINDOW* window = newwin(0,0,0,0);
 

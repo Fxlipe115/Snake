@@ -3,6 +3,7 @@
 #include "grf_snake_lib.h"
 
 
+//Returns size of snake
 int getSnakeSize(Snake *head){
 	int size = 0;
 	while(head != NULL){
@@ -12,6 +13,7 @@ int getSnakeSize(Snake *head){
 	return size;
 }
 
+//Increase snake by 1, putting 0 or 1 on food attribute
 void increaseSnake(Snake *head,int food){
 	Snake *newbody = malloc(sizeof(Snake));
 	
@@ -23,6 +25,7 @@ void increaseSnake(Snake *head,int food){
 	head->next = newbody;
 }
 
+//Removes the last element from snake
 void decreaseSnake(Snake *head){
 	if(getSnakeSize(head) > 1){
 		Snake* snake = head->next;
@@ -36,6 +39,7 @@ void decreaseSnake(Snake *head){
 	}   
 }
 
+//Creates snake of size "size" on position x,y
 Snake* newSnake(int size,int x,int y){
 	Snake *head = malloc(sizeof(Snake));
 	head->x = x;
@@ -58,6 +62,7 @@ Snake* newSnake(int size,int x,int y){
 	return head;
 }
 
+//Frees all memory associated with snake
 void destroySnake(Snake *head){
 	while(head != NULL){
 		Snake *tmp = head;
@@ -66,6 +71,7 @@ void destroySnake(Snake *head){
 	}
 }
 
+//Removes last element, puts new one in place of head and moves head in direction dir
 void moveSnake(Snake *head,int dir,int xSize,int ySize){
 	
 	if(dir == _RIGHT_ ||\
@@ -98,11 +104,9 @@ void moveSnake(Snake *head,int dir,int xSize,int ySize){
 	}
 }
 
-	
+//Returns true if position x,y coincides with any snake part
 int isSnake(Snake *head,int x,int y){
 	int isSnake = 0;
-
-	//head = head->next;
 
 	while(head != NULL && isSnake == 0){
 
@@ -116,6 +120,7 @@ int isSnake(Snake *head,int x,int y){
 	return isSnake;
 }
 
+//Returns true if snake part located on x,y has attribute food = 1
 int hasFood(Snake *head,int x,int y){
 	int hasFood = 0;
 

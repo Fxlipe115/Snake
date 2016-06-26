@@ -4,6 +4,8 @@
 #include "hsb_apple_lib.h"
 #include "grf_snake_lib.h"
 
+
+//Creates apple and randomically gives it a x,y position until it does not collide with anything on the map
 Apple* newApple(char** map, int height, int width, Snake* snake){
 	Apple* apple = malloc(sizeof(Apple));
 
@@ -27,6 +29,7 @@ Apple* newApple(char** map, int height, int width, Snake* snake){
 	return apple;
 }
 
+//Returns true if position x,y has apple and destroy apple
 int eatApple(Apple* apple, int x, int y){
 	int eaten = 0;
 
@@ -40,6 +43,7 @@ int eatApple(Apple* apple, int x, int y){
 	return eaten;
 }
 
+//Returns true if position x,y has apple
 int isApple(Apple* apple, int x, int y){
 	int isApple = 0;
 

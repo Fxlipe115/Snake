@@ -5,23 +5,24 @@
 
 #include "grf_control_lib.h"
 
-#define SNAKE_SIZE 5
-#define MATRIX_SIZE 25
-
 int main(){
 	printf("Snake started.\n\n");
 
+	//seed for rand function
 	srand(time(NULL));
 
-	//Inicia ncurses
+	//start ncurses
 	initscr();
 
+	//ncurses options
 	nodelay(stdscr,TRUE);
 	keypad(stdscr,TRUE);
 	noecho();
 
+	//start menu
 	menuControl();
 
+	//once game is over, finish ncurses
 	endwin();
 	
 	printf("Snake ended.\n\n");

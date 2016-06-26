@@ -3,7 +3,6 @@
 #include "grf_snake_lib.h" 
 #include "hsb_mouse_lib.h"
 
-//UNUSED
 int isMouse(Mouse* mouse, int x, int y){
 	int isMouse = 0;
 
@@ -103,6 +102,7 @@ Mouse* newMouse(Mouse* mouselist, char** map, int height, int width, int time, S
 	return mouse;
 }
 
+//Frees all memory associated with mouse list given
 Mouse* destroyAllMice(Mouse* mouse){
 	while(mouse != NULL){
 		Mouse *tmp = mouse;

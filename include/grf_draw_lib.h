@@ -11,7 +11,7 @@ char** loadMap(char* filename,int *width,int *height);
 
 void destroyMap(char** map,int height);
 
-void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int score,int lives,int miceEaten);
+void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int lvl,int score,int lives,int miceEaten);
 
 void drawMenu(WINDOW* menu,int option);
 
