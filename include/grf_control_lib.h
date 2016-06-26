@@ -13,6 +13,8 @@ int gameControl(int dir,int* isPaused);
 
 void levelControl();
 
+void getPlayerData(int score);
+
 void getInitPos(char** map,int width,int height,int* xpos,int* ypos);
 
 #endif

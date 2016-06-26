@@ -4,11 +4,13 @@
 
 #include "grf_scores_lib.h"
 
+#define SCORES_NUMBER 15
+
 void getScores(Score* scores){
 	FILE *fp = fopen("highscores.bin","rb");
 
 	if(fp != NULL){
-		fread(scores,sizeof(Score),10,fp);
+		fread(scores,sizeof(Score),SCORES_NUMBER,fp);
 
 		fclose(fp);
 	}
@@ -17,30 +19,30 @@ void getScores(Score* scores){
 int updateScore(Score score){
 	int isHighscore = 0;
 
-	FILE *fp = fopen("highscores.bin","wb");
-
-	Score *scores = malloc(10 * sizeof(Score));
+	Score *scores = malloc(SCORES_NUMBER * sizeof(Score));
 	getScores(scores);
+
+	FILE *fp = fopen("highscores.bin","wb");
 
 	if(fp != NULL){
 		int index = 0;
 
-		for(int i = 0; i < 10; i++){
-			if(score.score > scores[i].score){
+		for(int i = 0; i < SCORES_NUMBER && isHighscore == 0; i++){
+			if(score.score >= scores[i].score){
 				index = i;
 				isHighscore = 1;
 			}
 		}
 
 		if(isHighscore){
-			for(int i = 9; i > index; i--){
+			for(int i = SCORES_NUMBER - 1; i > index; i--){
 				scores[i] = scores[i-1];
 			}
 			
 			scores[index] = score;
 		}
 
-		fwrite(scores,sizeof(Score),10,fp);
+		fwrite(scores,sizeof(Score),SCORES_NUMBER,fp);
 
 		fclose(fp);
 	}
@@ -60,12 +62,12 @@ void scoreScreen(){
 
 	wmove(scorescr,0,0);
 
-	Score *scores = malloc(10 * sizeof(Score));
+	Score *scores = malloc(SCORES_NUMBER * sizeof(Score));
 	getScores(scores);
 
-	for(int i = 0; i < 10; i++){
+	for(int i = 0; i < SCORES_NUMBER; i++){
 		wattron(scorescr,COLOR_PAIR(2));
-		mvwprintw(scorescr,i+1,1,"%s",scores[i].name);
+		mvwprintw(scorescr,i+1,1,"%2d. %s",i+1,scores[i].name);
 		mvwprintw(scorescr,i+1,22,"|%03d",scores[i].score);
 		wattroff(scorescr,COLOR_PAIR(2));
 	}

@@ -4,8 +4,9 @@
 
 #include "grf_snake_lib.h"
 #include "hsb_mouse_lib.h"
+#include "hsb_apple_lib.h"
 
-//Carrega o mapa do arquivo "filename" e o retorna como um array de strings e informa por referência a altura e largura do mesmo
+//Loads map from file "filename" and returns it as a matrix of chars and returns by reference its width and height
 char** loadMap(char* filename,int* width,int* height){
 
 	FILE *mapfile = fopen(filename,"r");
@@ -40,10 +41,8 @@ void destroyMap(char** map,int height){
 	free(map);
 }
 
-//Imprime a tela com todos os elementos nela
-void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matrixSize,int matrixySize,int score,int lives){
-	//DESENHA A TELA
-	//initscr();
+//Prints screen with all elements given in it
+void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int score,int lives,int miceEaten){
 	start_color();
 
 	init_pair(1,COLOR_MAGENTA,COLOR_MAGENTA);//background
@@ -54,13 +53,14 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matri
 	init_pair(6,COLOR_GREEN,COLOR_GREEN);//body
 	init_pair(7,COLOR_BLACK,COLOR_GREEN);//head
 	init_pair(8,COLOR_BLACK,COLOR_WHITE);//mouse
-	init_pair(9,COLOR_RED,COLOR_WHITE);//rock
+	init_pair(9,COLOR_RED,COLOR_WHITE);//rock/apple
+	init_pair(10,COLOR_GREEN,COLOR_WHITE);//apple leaf
 	wmove(window,0,0);
 
 	wbkgd(window,COLOR_PAIR(1));	
 
 	wattron(window,COLOR_PAIR(2));
-	wprintw(window,"Score: %d  Lives: %d\n",score,lives);
+	wprintw(window,"Score: %03d  Lives: %d  Mice eaten: %0d/10\n",score,lives,miceEaten);
 	wattroff(window,COLOR_PAIR(2));
 
 	for(int y = 0; y<matrixySize; y++){
@@ -90,6 +90,14 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matri
 				wattron(window,COLOR_PAIR(8)|A_BOLD);
 				wprintw(window,"~>");
 				wattroff(window,COLOR_PAIR(8)|A_BOLD);
+			}else if(isApple(apple,x,y)){
+				//apple
+				wattron(window,COLOR_PAIR(10));
+				wprintw(window,"~");
+				wattroff(window,COLOR_PAIR(10));
+				wattron(window,COLOR_PAIR(9));
+				wprintw(window,"0");
+				wattroff(window,COLOR_PAIR(9));
 			}else if(map[y][x] == '*'){
 				//rocks
 				wattron(window,COLOR_PAIR(9));
@@ -107,19 +115,18 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,char **map,int matri
 	
 	
 	wrefresh(window);
-	//FIM DESENHA A TELA
 }
 
 void drawMenu(WINDOW* menu,int option){
-	char* options[] = {"Start Game","Select Level","Highscores","Quit"};
+	char* options[] = {"Start Game","Select Level","Highscores","Instructions","Quit"};
 
 	start_color();
-	init_pair(0,COLOR_WHITE,COLOR_BLACK);
-	wbkgd(menu,COLOR_PAIR(0));
+	init_pair(1,COLOR_WHITE,COLOR_BLACK);
+	wbkgd(menu,COLOR_PAIR(1));
 	
 	wmove(menu,0,0);
 
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i < 5; i++){
 		if(option == i){
 			wattron(menu,A_REVERSE);
 			wprintw(menu,"-%s\n",options[i]);
@@ -130,4 +137,15 @@ void drawMenu(WINDOW* menu,int option){
 	}
 	
 	wrefresh(menu);
+}
+
+void drawPlayerData(WINDOW* window, int score){
+	echo();
+	start_color();
+	init_pair(1,COLOR_WHITE,COLOR_MAGENTA);
+	wbkgd(window,COLOR_PAIR(1));
+
+	mvwprintw(window,5,5,"Your score: %d",score);
+
+	wrefresh(window);
 }

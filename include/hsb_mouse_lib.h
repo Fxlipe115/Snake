@@ -20,4 +20,7 @@ Mouse* eatMouse(Mouse* mouse,int *hasEaten,int x,int y);
 
 Mouse* newMouse(Mouse* mouselist, char** map, int height, int width, int time, Snake* snake);
 
+
+Mouse* destroyAllMice(Mouse* mouse);
+
 #endif

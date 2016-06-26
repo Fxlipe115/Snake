@@ -102,7 +102,7 @@ void moveSnake(Snake *head,int dir,int xSize,int ySize){
 int isSnake(Snake *head,int x,int y){
 	int isSnake = 0;
 
-	head = head->next;
+	//head = head->next;
 
 	while(head != NULL && isSnake == 0){
 

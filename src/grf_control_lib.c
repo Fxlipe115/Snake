@@ -44,20 +44,36 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver){
 	//Create mouse list
 	Mouse *mouse = NULL;
 
-	int isDead = 0;
+	//Apple for the end of the level
+	Apple *apple = NULL;
 
+	//Number of mice eaten
+	int miceEaten = 0;
+
+	//Flags
+	int isDead = 0;
 	int isPaused = 0;
 	
 	//MOVIMENTAÇÃO
 	do{
 		int hasEaten = 0;
 
-		//Game speed control
 		iteraction++;
 		if(iteraction % mapHeight == 0){
+			//Game speed control
 			wait.tv_nsec = ((wait.tv_nsec - 70000000) * .95) + 70000000;
-			mouse = newMouse(mouse,map,mapHeight,mapWidth,mapHeight*4,snake);
+
+			//Food creation control
+			if(miceEaten < 10){
+				mouse = newMouse(mouse,map,mapHeight,mapWidth,mapHeight*4,snake);
+			}
 		}
+
+		if(miceEaten >= 10 && apple == NULL && !isDead){
+			mouse = destroyAllMice(mouse);
+			apple = newApple(map,mapHeight,mapWidth,snake);
+		}
+
 
 		dir = gameControl(dir,&isPaused);
 
@@ -83,6 +99,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver){
 		if(hasEaten){
 			increaseSnake(snake,1);
 			score += (lvl+1);
+			miceEaten++;
 		}
 
 		//Checks collision with rock
@@ -106,21 +123,27 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver){
 			isDead = 1;
 			*isGameOver = 1;
 		}
+
+		//If snake ate the apple
+		if(eatApple(apple,snake->x,snake->y)){
+			//End level
+			isDead = 1;
+		}
 			
-		//DESENHA A TELA
-		refreshScreen(gamescr,snake,mouse,map,mapWidth,mapHeight,score,*lives);
+		//Draws screen
+		refreshScreen(gamescr,snake,mouse,apple,map,mapWidth,mapHeight,score,*lives,miceEaten);
 		
-		//Espera para próxima iteração
+		//Wait for next iteration
 		nanosleep(&wait,NULL);
 		
 	}while(!isDead);
 
 	destroyMap(map,mapHeight);
 
-	//Encerra a tela
+	//Close window
 	delwin(gamescr);
 
-	//Destroy a cobra	
+	//Destroy snake
 	destroySnake(snake);
 	
 	return score;
@@ -152,7 +175,7 @@ void menuControl(){
 			case 'S':
 			case KEY_DOWN:
 				option++;
-				if(option > 3){
+				if(option > 4){
 					option--;
 				}
 				drawMenu(menuscr,option);
@@ -171,8 +194,12 @@ void menuControl(){
 					case 2:
 						scoreScreen();
 						break;
-					//Quit
+					//Instructions
 					case 3:
+						//TODO
+						break;
+					//Quit
+					case 4:
 						exit = 1;
 						break;
 				}
@@ -232,13 +259,32 @@ int gameControl(int dir,int* isPaused){
 }
 
 void levelControl(){
+	int curlevel = 1;
 	int isGameOver = 0;
 	int lives = 3;
 	int score = 0;
 
 	while(!isGameOver){
-		score = startLevel(0,score,5,&lives,&isGameOver);
+		score = startLevel(curlevel,score,5,&lives,&isGameOver);
 	}
+	
+	getPlayerData(score);	
+}
+
+void getPlayerData(int score){
+	WINDOW *pdscr = newwin(0,0,0,0);
+	Score player;
+
+	echo();
+
+	drawPlayerData(pdscr,score);
+
+	mvwscanw(pdscr,7,5,"%s",player.name);
+	player.score = score;
+
+	updateScore(player);
+
+	delwin(pdscr);
 }
 
 void getInitPos(char** map,int width,int height,int* xpos,int* ypos){

@@ -3,6 +3,7 @@
 #include "grf_snake_lib.h" 
 #include "hsb_mouse_lib.h"
 
+//UNUSED
 int isMouse(Mouse* mouse, int x, int y){
 	int isMouse = 0;
 
@@ -15,7 +16,7 @@ int isMouse(Mouse* mouse, int x, int y){
 			 isMouse=1;
 		}
 	
-		mouse= mouse->next;
+		mouse = mouse->next;
 	}
 
 	return isMouse;
@@ -79,10 +80,10 @@ Mouse* newMouse(Mouse* mouselist, char** map, int height, int width, int time, S
 	//mouse lifespan to 'time'
 	mouse->time = time;
 	//flag
-	int isValid = 0;
+	int isValid = 1;
 	do{
 		//flag
-		isValid = 0;
+		isValid = 1;
 		//ramdomly set (x,y) position to mouse
 		mouse->x = rand() % width;
 		mouse->y = rand() % height;
@@ -93,13 +94,20 @@ Mouse* newMouse(Mouse* mouselist, char** map, int height, int width, int time, S
 		      	isSnake(snake, mouse->x, mouse->y)){
 		//       	isMouse(mouselist, mouse->x, mouse->y)){
 			
-			isValid = 1;
+			isValid = 0;
 		}
 
 
-	} while (isValid);
+	} while (!isValid);
 	
 	return mouse;
 }
 
-
+Mouse* destroyAllMice(Mouse* mouse){
+	while(mouse != NULL){
+		Mouse *tmp = mouse;
+		mouse = mouse->next;
+		free(tmp);
+	}
+	return NULL;
+}
