@@ -10,4 +10,4 @@ To compile type `make && make clean` on a terminal inside the "Snake" folder.
 
 Use `./snake` to run.
 
-To clear the highscores run with option -c or --clear.
+To clear the highscores run with option `-c` or `--clear`.
