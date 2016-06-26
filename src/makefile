@@ -5,7 +5,7 @@
 CC=gcc -std=c99 -c
 
 #Flags
-CFLAGS=-Wall -std=gnu99 -ggdb3 -O0 -I'../include'
+CFLAGS=-Wall -std=gnu99 -ggdb3 -I'../include'
 
 #Source files
 SRC=$(wildcard *.c)
