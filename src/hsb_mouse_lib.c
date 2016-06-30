@@ -21,34 +21,36 @@ int isMouse(Mouse* mouse, int x, int y){
 	return isMouse;
 }
 
-void destroyLastMouse(Mouse* mouse){
+Mouse* destroyLastMouse(Mouse* mouse){
 	//destroys the last mouse of given list
 	//sees if list is not empty
 	if(mouse != NULL){
 		//stores second to last mouse(aka new last mouse)
-		Mouse *previous = NULL;
+		Mouse *previous = mouse, *last = mouse;
 
-		mouse->time--;
+		last->time--;
 
 		//go last mouse in the list
-		while(mouse->next != NULL){
+		while(last->next != NULL){			
+			previous = last;
 
-			previous = mouse;
-			
+			last = last->next;
 
-			mouse = mouse->next;
-
-			mouse->time--;
+			last->time--;
 		}
 
 		//if the mouse's life is over
 		if(mouse->time == 0){
-			//brutally kill the mouse
-			free(mouse);
+			free(last);
+			mouse = NULL;
 
+		}else if(last->time == 0){
+			//brutally kill the mouse
+			free(last);
 			previous->next = NULL;
 		}
 	}
+	return mouse;
 }
 
 Mouse* eatMouse(Mouse* mouse,int* hasEaten,int x, int y){

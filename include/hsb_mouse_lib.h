@@ -14,7 +14,7 @@ struct mouse *next;
 
 int isMouse(Mouse* mouse, int x, int y);
 
-void destroyLastMouse(Mouse* mouse);
+Mouse* destroyLastMouse(Mouse* mouse);
 
 Mouse* eatMouse(Mouse* mouse,int *hasEaten,int x,int y);
 

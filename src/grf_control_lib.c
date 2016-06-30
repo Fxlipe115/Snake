@@ -95,7 +95,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 		//Tries to eat mouse and changes hasEaten status on success
 		mouse = eatMouse(mouse,&hasEaten,snake->x,snake->y);
 		//Destroy one mouse when its time is 0
-		destroyLastMouse(mouse);
+		mouse = destroyLastMouse(mouse);
 
 		//Increase snake size and update status
 		if(hasEaten){
