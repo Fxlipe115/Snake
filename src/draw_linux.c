@@ -5,8 +5,8 @@
 
 void draw_initialize(void){
     start_color();
-	init_pair(COLOR_BACKGROUND, COLOR_MAGENTA, COLOR_MAGENTA);
-	init_pair(COLOR_SCORE, COLOR_WHITE, COLOR_BLACK);
+    init_pair(COLOR_BACKGROUND, COLOR_MAGENTA, COLOR_MAGENTA);
+    init_pair(COLOR_SCORE, COLOR_WHITE, COLOR_BLACK);
     init_pair(COLOR_MAP, COLOR_WHITE, COLOR_WHITE);
     init_pair(COLOR_WALL, COLOR_BLACK, COLOR_BLACK);
     init_pair(COLOR_FOOD_EATEN, COLOR_BLACK, COLOR_GREEN);
