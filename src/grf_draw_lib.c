@@ -121,7 +121,7 @@ void drawMenu(WINDOW* menu,int option){
         if(option == i){
             draw_at(i+3, 36, COLOR_SELECTED_OPTION, "-%s", options[i]);
         }else{
-            draw_at(i+3, 36, COLOR_MENU, " %s\n", options[i]);
+            draw_at(i+3, 36, COLOR_TEXT, " %s\n", options[i]);
         }
     }
 
@@ -132,46 +132,38 @@ void drawMenu(WINDOW* menu,int option){
 
 //Screen for asking the player's name before evaluating his score
 void drawPlayerData(WINDOW* window, int score){
+    // TODO: wrap this in an input module
     echo();
-    start_color();
-    init_pair(1,COLOR_WHITE,COLOR_MAGENTA);
-    wbkgd(window,COLOR_PAIR(1));
+    
+    draw_initialize();
+    set_background_color(COLOR_PLAYER_DATA);
 
-    mvwprintw(window,2,8,"Game Over!");
-    mvwprintw(window,5,5,"Your score: %03d",score);
-    mvwprintw(window,7,5,"Your name:  ");
+    draw_at(2,8, COLOR_PLAYER_DATA, "Game Over!");
+    draw_at(5,5, COLOR_PLAYER_DATA, "Your score: %03d",score);
+    draw_at(7,5, COLOR_PLAYER_DATA, "Your name:  ");
 
-    wrefresh(window);
+    refresh_screen();
 }
 
 //Instructions screen
 void instructionsScreen(){
-    WINDOW* window = newwin(0,0,0,0);
+    draw_initialize();
+    set_background_color(COLOR_BACKGROUND);
 
-    start_color();
-    init_pair(1,COLOR_BLACK,COLOR_BLUE);//bkgd
-    init_pair(2,COLOR_WHITE,COLOR_BLACK);//text
-    wbkgd(window,COLOR_PAIR(1));
+    draw_at(0, 0, COLOR_TEXT, "-----------INSTRUCTIONS-----------");
+    draw_at(1, 0, COLOR_TEXT, "**********************************");
+    draw_at(2, 0, COLOR_TEXT, "* W,A,S,D or arrow keys to move. *");
+    draw_at(3, 0, COLOR_TEXT, "*                                *");
+    draw_at(4, 0, COLOR_TEXT, "* P to pause.                    *");
+    draw_at(5, 0, COLOR_TEXT, "*                                *");
+    draw_at(6, 0, COLOR_TEXT, "* ESC or Q to quit game.         *");
+    draw_at(7, 0, COLOR_TEXT, "**********************************");
 
-    wmove(window,0,0);
+    draw_at(10, 2, COLOR_TEXT, "Press any key to exit.");
 
-    wattron(window,COLOR_PAIR(2));
+    refresh_screen();
 
-    mvwprintw(window,0,0,"-----------INSTRUCTIONS-----------");
-    mvwprintw(window,1,0,"**********************************");
-    mvwprintw(window,2,0,"* W,A,S,D or arrow keys to move. *");
-    mvwprintw(window,3,0,"*                                *");
-    mvwprintw(window,4,0,"* P to pause.                    *");
-    mvwprintw(window,5,0,"*                                *");
-    mvwprintw(window,6,0,"* ESC or Q to quit game.         *");
-    mvwprintw(window,7,0,"**********************************");
-
-    mvwprintw(window,10,2,"Press any key to exit.");
-
-    wattroff(window,COLOR_PAIR(2));
-
-    wrefresh(window);
-
+    // TODO: wrap this in an input module
     int k;
     do{
         k = getch();

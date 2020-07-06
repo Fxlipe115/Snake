@@ -19,6 +19,8 @@ void draw_initialize(void){
     init_pair(COLOR_LOGO, COLOR_GREEN, COLOR_BLACK);
     init_pair(COLOR_MENU, COLOR_WHITE, COLOR_BLACK);
     init_pair(COLOR_SELECTED_OPTION, COLOR_BLACK, COLOR_WHITE);
+    init_pair(COLOR_PLAYER_DATA, COLOR_WHITE, COLOR_MAGENTA);
+    init_pair(COLOR_TEXT, COLOR_WHITE, COLOR_BLACK);
 }
 
 void draw(colors_t color, const char* text, ...){
