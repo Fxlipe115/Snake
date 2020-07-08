@@ -8,12 +8,16 @@
 
 void set_blocking(void);
 void set_non_blocking(void);
-key_t to_key_t(int key_code);
+control_key_t to_key_t(int key_code);
 
-void initialize_control(void){
-    if(stdscr != NULL){
+void initialize_controls(void){
+    if(stdscr == NULL){
         initscr();
     }
+}
+
+void end_controls(void){
+    endwin();
 }
 
 void get_formatted(char* fmt, ...){
@@ -39,7 +43,7 @@ void wait_for_key_press(void){
     }while(k == ERR);
 }
 
-key_t get_key(void){
+control_key_t get_key(void){
     set_blocking();
 
     int pressed_key = getch();
@@ -47,7 +51,7 @@ key_t get_key(void){
     return to_key_t(pressed_key);
 }
 
-key_t get_key_non_blocking(void){
+control_key_t get_key_non_blocking(void){
     set_non_blocking();
     
     int pressed_key = getch();
@@ -67,8 +71,8 @@ void set_non_blocking(void){
     noecho();
 }
 
-key_t to_key_t(int key_code){
-    key_t key;
+control_key_t to_key_t(int key_code){
+    control_key_t key;
     switch(toupper(key_code)){
         case 'W':
         case KEY_UP:

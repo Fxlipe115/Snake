@@ -1,11 +1,12 @@
 #include <stdio.h>
-#include <curses.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
 #include "grf_control_lib.h"
 #include "grf_scores_lib.h"
+#include "draw.h"
+#include "control.h"
 
 int main(int argc, char* argv[]){
 	if(argc > 1){
@@ -19,19 +20,14 @@ int main(int argc, char* argv[]){
 	//seed for rand function
 	srand(time(NULL));
 
-	//start ncurses
-	initscr();
-
-	//ncurses options
-	nodelay(stdscr,TRUE);
-	keypad(stdscr,TRUE);
-	noecho();
+    draw_initialize();
+    initialize_controls();
 
 	//start menu
 	menuControl();
 
-	//once game is over, finish ncurses
-	endwin();
+    end_draw();
+    end_controls();
 	
 	printf("Snake ended.\n\n");
 	

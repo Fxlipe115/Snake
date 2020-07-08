@@ -1,9 +1,10 @@
 #include <stdio.h>
-#include <curses.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "grf_scores_lib.h"
+#include "draw.h"
+#include "control.h"
 
 #define SCORES_NUMBER 15
 
@@ -62,42 +63,33 @@ int updateScore(Score score){
 //shows highscores
 //if called after puting a score on the list can show a message saying if it was or not a highscore
 void scoreScreen(int isHighscore){
-	WINDOW* scorescr = newwin(0,0,0,0);
+    draw_initialize();
+	set_background_color(COLOR_MENU);
 
-	start_color();
-	init_pair(1,COLOR_BLACK,COLOR_GREEN);//bkgd
-	init_pair(2,COLOR_WHITE,COLOR_BLACK);//text
-	wbkgd(scorescr,COLOR_PAIR(1));
-
-	wmove(scorescr,0,0);
+	move_cursor(0, 0);
 
 	Score *scores = malloc(SCORES_NUMBER * sizeof(Score));
 	getScores(scores);
 
 	for(int i = 0; i < SCORES_NUMBER; i++){
-		wattron(scorescr,COLOR_PAIR(2));
-		mvwprintw(scorescr,i+1,1,"%2d. %s",i+1,scores[i].name);
-		mvwprintw(scorescr,i+1,22,"|%03d",scores[i].score);
-		wattroff(scorescr,COLOR_PAIR(2));
+		draw_at(i+1, 1, COLOR_MENU, "%2d. %s", i+1,scores[i].name);
+		draw_at(i+1, 22, COLOR_MENU, "|%03d", scores[i].score);
 	}
 
 	switch(isHighscore){
 		case 0:
-			mvwprintw(scorescr,18,2,"You did not make it to the top 15. :'\(");
+			draw_at(18, 2, COLOR_SELECTED_OPTION, "You did not make it to the top 15. :'\(");
 			break;
 		case 1:
-			mvwprintw(scorescr,18,2,"HIGHSCORE!!!");
+			draw_at(18, 2, COLOR_SELECTED_OPTION, "HIGHSCORE!!!");
 			break;
 	}
 
-	mvwprintw(scorescr,20,0,"Press any key to exit.");
+	draw_at(20, 0, COLOR_MENU, "Press any key to exit.");
 	
-	wrefresh(scorescr);
+	refresh_screen();
 
-	int k;
-	do{
-		k = getch();
-	}while(k == ERR);
+    wait_for_key_press();
 
 	free(scores);
 }

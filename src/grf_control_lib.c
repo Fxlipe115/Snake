@@ -2,6 +2,7 @@
 #include <time.h>
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "grf_snake_lib.h"
 #include "hsb_mouse_lib.h"
@@ -15,10 +16,6 @@
 #define LEVELS_NUMBER 7
 
 int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, int* levelFinished){
-	nodelay(stdscr,TRUE);
-	keypad(stdscr,TRUE);
-	noecho();
-
 	//Initial direction of snake
 	int dir = _RIGHT_;
 
@@ -154,7 +151,7 @@ void menuControl(){
 	do{
 		drawMenu(option);
 
-		key_t key = get_key();
+		control_key_t key = get_key();
 
 		switch(key){
 			case K_UP:
@@ -266,8 +263,6 @@ void levelControl(){
 void getPlayerData(int score){
 	Score player;
 
-	echo();
-
 	drawPlayerData(score);
 
 	//mvwscanw(pdscr,7,17,"%s",player.name);
@@ -317,7 +312,7 @@ void chooseLevel(){
 		refresh_screen();
 
 		//Take care of user input
-		key_t key = get_key();
+		control_key_t key = get_key();
 
 		switch(key){
 			case K_UP:

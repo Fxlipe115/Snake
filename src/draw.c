@@ -4,7 +4,7 @@
 #include <stdarg.h>
 
 void draw_initialize(void){
-    if(stdscr != NULL){
+    if(stdscr == NULL){
         initscr();
     }
     start_color();
@@ -24,6 +24,10 @@ void draw_initialize(void){
     init_pair(COLOR_SELECTED_OPTION, COLOR_BLACK, COLOR_WHITE);
     init_pair(COLOR_PLAYER_DATA, COLOR_WHITE, COLOR_MAGENTA);
     init_pair(COLOR_TEXT, COLOR_WHITE, COLOR_BLACK);
+}
+
+void end_draw(void){
+    endwin();
 }
 
 void draw(colors_t color, const char* text, ...){

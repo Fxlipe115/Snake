@@ -10,6 +10,8 @@ typedef enum {
 
 void draw_initialize(void);
 
+void end_draw(void);
+
 void draw(colors_t color, const char* text, ...);
 
 void draw_at(int x, int y, colors_t color, const char* text, ...);
