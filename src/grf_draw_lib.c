@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <curses.h>
 #include <stdlib.h>
 
 #include "draw.h"
@@ -44,7 +43,7 @@ void destroyMap(char** map,int height){
 }
 
 //Prints screen with all elements given in it
-void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int lvl,int score,int lives,int miceEaten){
+void refreshScreen(Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int lvl,int score,int lives,int miceEaten){
     draw_initialize();
     move_cursor(0,0);
 
@@ -81,7 +80,7 @@ void refreshScreen(WINDOW *window,Snake *snake,Mouse *mouse,Apple *apple,char **
     refresh_screen();
 }
 
-void drawMenu(WINDOW* menu,int option){
+void drawMenu(int option){
     char* options[] = {"Start Game","Select Level","Highscores","Instructions","Quit"};
     draw_initialize();
     set_background_color(COLOR_MENU);
@@ -131,10 +130,7 @@ void drawMenu(WINDOW* menu,int option){
 }
 
 //Screen for asking the player's name before evaluating his score
-void drawPlayerData(WINDOW* window, int score){
-    // TODO: wrap this in an input module
-    echo();
-    
+void drawPlayerData(int score){
     draw_initialize();
     set_background_color(COLOR_PLAYER_DATA);
 
@@ -162,10 +158,4 @@ void instructionsScreen(){
     draw_at(10, 2, COLOR_TEXT, "Press any key to exit.");
 
     refresh_screen();
-
-    // TODO: wrap this in an input module
-    int k;
-    do{
-        k = getch();
-    }while(k == ERR);
 }

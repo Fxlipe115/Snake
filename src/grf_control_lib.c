@@ -1,4 +1,3 @@
-#include <curses.h>
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
@@ -10,14 +9,14 @@
 #include "grf_draw_lib.h"
 #include "grf_scores_lib.h"
 #include "grf_collisions_lib.h"
+#include "control.h"
+#include "draw.h"
 
 #define LEVELS_NUMBER 7
 
 int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, int* levelFinished){
-	//Game window
-	WINDOW *gamescr = newwin(0,0,0,0);
-	nodelay(gamescr,TRUE);
-	keypad(gamescr,TRUE);
+	nodelay(stdscr,TRUE);
+	keypad(stdscr,TRUE);
 	noecho();
 
 	//Initial direction of snake
@@ -81,10 +80,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 
 		//Pause
 		if(isPaused){
-			int key;
-			do{
-				key = getch();
-			}while(key == ERR);
+            wait_for_key_press();
 			isPaused = 0;
 			continue;
 		}
@@ -135,7 +131,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 		}
 			
 		//Draws screen
-		refreshScreen(gamescr,snake,mouse,apple,map,mapWidth,mapHeight,lvl,score,*lives,miceEaten);
+		refreshScreen(snake,mouse,apple,map,mapWidth,mapHeight,lvl,score,*lives,miceEaten);
 		
 		//Wait for next iteration
 		nanosleep(&wait,NULL);
@@ -143,9 +139,6 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 	}while(!isDead);
 
 	destroyMap(map,mapHeight);
-
-	//Close window
-	delwin(gamescr);
 
 	//Destroy snake
 	destroySnake(snake);
@@ -155,37 +148,30 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 
 //Receives input, changes the current option and sends it to drawMenu function
 void menuControl(){
-	WINDOW *menuscr = newwin(0,0,0,0);
 	int option = 0;
 	int exit = 0;
 
-	nodelay(menuscr,FALSE);
-	keypad(menuscr,TRUE);
-	noecho();
-
 	do{
-		drawMenu(menuscr,option);
+		drawMenu(option);
 
-		int key = getch();
+		key_t key = get_key();
 
-		switch(toupper(key)){
-			case 'W':
-			case KEY_UP:
+		switch(key){
+			case K_UP:
 				option--;
 				if(option < 0){
 					option++;
 				}
-				drawMenu(menuscr,option);
+				drawMenu(option);
 				break;
-			case 'S':
-			case KEY_DOWN:
+			case K_DOWN:
 				option++;
 				if(option > 4){
 					option--;
 				}
-				drawMenu(menuscr,option);
+				drawMenu(option);
 				break;
-			case '\n':
+			case K_ENTER:
 				//Selects current option
 				switch(option){
 					//New Game
@@ -202,7 +188,7 @@ void menuControl(){
 						break;
 					//Instructions
 					case 3:
-						instructionsScreen();
+                        instructions();
 						break;
 					//Quit
 					case 4:
@@ -210,49 +196,45 @@ void menuControl(){
 						break;
 				}
 				break;
+            default:
+                break;
 		}
 	}while(!exit);
-
-	delwin(menuscr);
 }
 
 int gameControl(int dir,int* isPaused){
-	int key = getch();
+	int key = get_key_non_blocking();
 	
 	//Case it's a direction key, evaluates if diretion is valid
 	//case it's 'p' changes isPaused to true
 	//case q or esc returns q for quiting the level
-	if(key != ERR){
-		switch(toupper(key)){
-			case 'W':
-			case KEY_UP:
+	if(key != K_ERR){
+		switch(key){
+			case K_UP:
 				if(dir == _LEFT_ || dir == _RIGHT_){
 					dir = _UP_;
 				}
 				break;
-			case 'A':
-			case KEY_LEFT:
+			case K_LEFT:
 				if(dir == _UP_ || dir == _DOWN_){
 					dir = _LEFT_;
 				}
 				break;
-			case 'S':
-			case KEY_DOWN:
+			case K_DOWN:
 				if(dir == _LEFT_ || dir == _RIGHT_){
 					dir = _DOWN_;
 				}
 				break;
-			case 'D':
-			case KEY_RIGHT:
+			case K_RIGHT:
 				if(dir == _UP_ || dir == _DOWN_){
 					dir = _RIGHT_;
 				}
 				break;
-			case 'P':
+			case K_PAUSE:
 				*isPaused = 1;
 				break;
-			case 'Q':
-			case KEY_ESC:
+			case K_QUIT:
+			case K_ESC:
 				dir = 'Q';
 				break;
 		}
@@ -282,19 +264,17 @@ void levelControl(){
 
 //Gets player name and score and send it to update score function, then calls the highscores screen
 void getPlayerData(int score){
-	WINDOW *pdscr = newwin(0,0,0,0);
 	Score player;
 
 	echo();
 
-	drawPlayerData(pdscr,score);
+	drawPlayerData(score);
 
-	mvwscanw(pdscr,7,17,"%s",player.name);
+	//mvwscanw(pdscr,7,17,"%s",player.name);
+	get_formatted("%s",player.name);
 	player.score = score;
 
 	int isHighscore = updateScore(player);
-
-	delwin(pdscr);
 
 	scoreScreen(isHighscore);
 }
@@ -313,67 +293,59 @@ void getInitPos(char** map,int width,int height,int* xpos,int* ypos){
 
 //Draws choose level menu and calls the level selected
 void chooseLevel(){
-	WINDOW *levelsscr = newwin(0,0,0,0);
 	int level = 0;
 	int exit = 0;
 	int lives = 1;
 	int isGameOver = 0;
 	int levelFinished = 0;
 
+    draw_initialize();
+    set_background_color(COLOR_MENU);
+
 	do{
-		start_color();
-		init_pair(1,COLOR_WHITE,COLOR_BLACK);
-		wbkgd(levelsscr,COLOR_PAIR(1));
-
-		keypad(levelsscr,TRUE);
-		noecho();
-
 		//Draw level options
-		wmove(levelsscr,0,0);
+		move_cursor(0, 0);
 		for(int i = 0; i < LEVELS_NUMBER; i++){
 			if(level == i){
-				wattron(levelsscr,A_REVERSE);
-				wprintw(levelsscr,"-LEVEL %d\n",i+1);
-				wattroff(levelsscr,A_REVERSE);
+				draw(COLOR_SELECTED_OPTION, "-LEVEL %d\n", i+1);
 			}else{
-				wprintw(levelsscr," LEVEL %d\n",i+1);
+				draw(COLOR_MENU, " LEVEL %d\n", i+1);
 			}
 		}
-		wprintw(levelsscr,"\nPress ESC to exit");
+		draw(COLOR_MENU, "\nPress ESC to exit");
 		
-		wrefresh(levelsscr);
+		refresh_screen();
 
 		//Take care of user input
-		int key;
-		do{
-			 key = getch();
-		}while(key == ERR);
+		key_t key = get_key();
 
-		switch(toupper(key)){
-			case 'W':
-			case KEY_UP:
+		switch(key){
+			case K_UP:
 				level--;
 				if(level < 0){
 					level++;
 				}
 				break;
-			case 'S':
-			case KEY_DOWN:
+			case K_DOWN:
 				level++;
 				if(level > LEVELS_NUMBER - 1){
 					level--;
 				}
 				break;
-			case '\n':
+			case K_ENTER:
 				lives = 1;
 				startLevel(level,0,5,&lives,&isGameOver,&levelFinished);
 				break;
-			case KEY_ESC:
+			case K_ESC:
 				exit = 1;
 				break;
+            default:
+                break;
 		}
 	}while(!exit);
-
-	delwin(levelsscr);
 }
 
+void instructions(){
+    instructionsScreen();
+    wait_for_key_press();
+}

@@ -19,4 +19,6 @@ void getInitPos(char** map,int width,int height,int* xpos,int* ypos);
 
 void chooseLevel();
 
+void instructions();
+
 #endif

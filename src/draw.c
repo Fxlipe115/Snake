@@ -4,6 +4,9 @@
 #include <stdarg.h>
 
 void draw_initialize(void){
+    if(stdscr != NULL){
+        initscr();
+    }
     start_color();
     init_pair(COLOR_BACKGROUND, COLOR_MAGENTA, COLOR_MAGENTA);
     init_pair(COLOR_SCORE, COLOR_WHITE, COLOR_BLACK);
