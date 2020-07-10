@@ -1,46 +1,8 @@
-#include <stdio.h>
+#include "grf_draw_lib.h"
+
 #include <stdlib.h>
 
 #include "draw.h"
-#include "grf_snake_lib.h"
-#include "hsb_mouse_lib.h"
-#include "hsb_apple_lib.h"
-
-//Loads map from file "filename" and returns it as a matrix of chars and returns by reference its width and height
-char** loadMap(char* filename,int* width,int* height){
-
-    FILE *mapfile = fopen(filename,"r");
-    char **mapa;
-
-    if(mapfile != NULL){
-        fscanf(mapfile,"%d",height);
-        fscanf(mapfile,"%d",width);
-        fseek(mapfile,1,SEEK_CUR);
-
-        //Aloca a matriz que armazena o mapa
-        char **map = (char**)malloc(*height * sizeof(char*));
-        for(int i = 0; i < *height; i++){
-            map[i] = malloc((*width+2) * sizeof(char));
-        }
-
-        for(int i = 0;i<*height;i++){
-            fgets(map[i],*width+2,mapfile);
-        }
-
-        mapa = map;
-        fclose(mapfile);
-    }
-
-    return mapa;
-}
-
-//Frees the memory associated with the map matrix
-void destroyMap(char** map,int height){
-    for(int i = 0; i<height; i++){
-        free(map[i]);
-    }
-    free(map);
-}
 
 //Prints screen with all elements given in it
 void refreshScreen(Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int lvl,int score,int lives,int miceEaten){
@@ -130,15 +92,16 @@ void drawMenu(int option){
 }
 
 //Screen for asking the player's name before evaluating his score
-void drawPlayerData(int score){
+void drawPlayerData(Score* player){
     draw_initialize();
     set_background_color(COLOR_PLAYER_DATA);
 
     draw_at(2,8, COLOR_PLAYER_DATA, "Game Over!");
-    draw_at(5,5, COLOR_PLAYER_DATA, "Your score: %03d",score);
+    draw_at(5,5, COLOR_PLAYER_DATA, "Your score: %03d", player->score);
     draw_at(7,5, COLOR_PLAYER_DATA, "Your name:  ");
-
     refresh_screen();
+
+    get_formatted("%s", player->name);
 }
 
 //Instructions screen
@@ -157,5 +120,20 @@ void instructionsScreen(){
 
     draw_at(10, 2, COLOR_TEXT, "Press any key to exit.");
 
+    refresh_screen();
+}
+
+void level_selection_screen(int level, int levels_quantity){
+    set_background_color(COLOR_MENU);
+    move_cursor(0, 0);
+    for(int i = 0; i < levels_quantity; i++){
+        if(level == i){
+            draw(COLOR_SELECTED_OPTION, "-LEVEL %d\n", i+1);
+        }else{
+            draw(COLOR_MENU, " LEVEL %d\n", i+1);
+        }
+    }
+    draw(COLOR_MENU, "\nPress ESC to exit");
+    
     refresh_screen();
 }

@@ -1,7 +1,7 @@
 #ifndef DRAW_H
 #define DRAW_H
 
-typedef enum {
+typedef enum colors {
     COLOR_BACKGROUND=1, COLOR_SCORE, COLOR_MAP, COLOR_WALL, 
     COLOR_FOOD_EATEN, COLOR_BODY, COLOR_HEAD, COLOR_MOUSE, 
     COLOR_ROCK, COLOR_APPLE, COLOR_LEAF, COLOR_LOGO, COLOR_MENU,
@@ -15,6 +15,10 @@ void end_draw(void);
 void draw(colors_t color, const char* text, ...);
 
 void draw_at(int x, int y, colors_t color, const char* text, ...);
+
+void get_formatted(char* fmt, ...);
+
+void get_formatted_silent(char* fmt, ...);
 
 void set_background_color(colors_t color);
 

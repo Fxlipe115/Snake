@@ -49,6 +49,24 @@ void draw_at(int x, int y, colors_t color, const char* text, ...){
     va_end(args);
 }
 
+void get_formatted(char* fmt, ...){
+    nodelay(stdscr, FALSE);
+    echo();
+    va_list args;
+    va_start(args, fmt);
+    vw_scanw(stdscr, fmt, args);
+    va_end(args);
+}
+
+void get_formatted_silent(char* fmt, ...){
+    nodelay(stdscr, FALSE);
+    noecho();
+    va_list args;
+    va_start(args, fmt);
+    vw_scanw(stdscr, fmt, args);
+    va_end(args);
+}
+
 void set_background_color(colors_t color){
     bkgd(COLOR_PAIR(color));
 }

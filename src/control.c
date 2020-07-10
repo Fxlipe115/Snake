@@ -20,22 +20,6 @@ void end_controls(void){
     endwin();
 }
 
-void get_formatted(char* fmt, ...){
-    echo();
-    va_list args;
-    va_start(args, fmt);
-    vw_scanw(stdscr, fmt, args);
-    va_end(args);
-}
-
-void get_formatted_silent(char* fmt, ...){
-    noecho();
-    va_list args;
-    va_start(args, fmt);
-    vw_scanw(stdscr, fmt, args);
-    va_end(args);
-}
-
 void wait_for_key_press(void){
     int k;
     do{

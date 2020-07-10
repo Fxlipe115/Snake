@@ -11,7 +11,7 @@
 #include "grf_scores_lib.h"
 #include "grf_collisions_lib.h"
 #include "control.h"
-#include "draw.h"
+#include "map.h"
 
 #define LEVELS_NUMBER 7
 
@@ -263,11 +263,9 @@ void levelControl(){
 void getPlayerData(int score){
 	Score player;
 
-	drawPlayerData(score);
-
-	//mvwscanw(pdscr,7,17,"%s",player.name);
-	get_formatted("%s",player.name);
 	player.score = score;
+	drawPlayerData(&player);
+	
 
 	int isHighscore = updateScore(player);
 
@@ -294,22 +292,8 @@ void chooseLevel(){
 	int isGameOver = 0;
 	int levelFinished = 0;
 
-    draw_initialize();
-    set_background_color(COLOR_MENU);
-
 	do{
-		//Draw level options
-		move_cursor(0, 0);
-		for(int i = 0; i < LEVELS_NUMBER; i++){
-			if(level == i){
-				draw(COLOR_SELECTED_OPTION, "-LEVEL %d\n", i+1);
-			}else{
-				draw(COLOR_MENU, " LEVEL %d\n", i+1);
-			}
-		}
-		draw(COLOR_MENU, "\nPress ESC to exit");
-		
-		refresh_screen();
+		level_selection_screen(level, LEVELS_NUMBER);
 
 		//Take care of user input
 		control_key_t key = get_key();
