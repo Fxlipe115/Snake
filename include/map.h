@@ -1,8 +1,18 @@
 #ifndef MAP_H
 #define MAP_H
 
-char** loadMap(char* filename,int *width,int *height);
+typedef struct map_size {
+    int width;
+    int height;
+} map_size_t;
 
-void destroyMap(char** map,int height);
+typedef struct map {
+    char** layout;
+    map_size_t size;
+} map_t;
+
+map_t loadMap(char* filename);
+
+void destroyMap(map_t map);
 
 #endif

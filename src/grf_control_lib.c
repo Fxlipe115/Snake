@@ -15,7 +15,8 @@
 
 #define LEVELS_NUMBER 7
 
-int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, int* levelFinished){
+int startLevel(int lvl, int score, int snakeSize, int* lives, 
+               int* isGameOver, int* levelFinished){
 	//Initial direction of snake
 	int dir = _RIGHT_;
 
@@ -28,15 +29,15 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 	unsigned int iteraction = 0;
 
 	//Map loading
-	int mapHeight, mapWidth;
 	char mapfile[13];
 	sprintf(mapfile,"maps/%d.txt",lvl);
 
-	char **map = loadMap(mapfile,&mapWidth,&mapHeight);
+	map_t map = loadMap(mapfile);
 
 	//Create snake
 	int xpos = 0,ypos = 0;
-	getInitPos(map,mapWidth,mapHeight,&xpos,&ypos);
+	getInitPos(map.layout, map.size.width, 
+	           map.size.height, &xpos, &ypos);
 	Snake *snake = newSnake(snakeSize,xpos,ypos);
 
 	//Create mouse list
@@ -57,19 +58,21 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 		int hasEaten = 0;
 
 		iteraction++;
-		if(iteraction % mapHeight == 0){
+		if(iteraction % map.size.height == 0){
 			//Game speed control
 			wait.tv_nsec = ((wait.tv_nsec - 70000000) * .95) + 70000000;
 
 			//Food creation control
 			if(miceEaten < 10){
-				mouse = newMouse(mouse,map,mapHeight,mapWidth,mapHeight*4,snake);
+				mouse = newMouse(mouse, map.layout, map.size.height, 
+				                 map.size.width, map.size.height*4, snake);
 			}
 		}
 
 		if(miceEaten >= 10 && apple == NULL && !isDead){
 			mouse = destroyAllMice(mouse);
-			apple = newApple(map,mapHeight,mapWidth,snake);
+			apple = newApple(map.layout, map.size.height, 
+							 map.size.width, snake);
 		}
 
 
@@ -83,7 +86,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 		}
 
 		//Update snake position
-		moveSnake(snake,dir,mapWidth,mapHeight);
+		moveSnake(snake, dir, map.size.width, map.size.height);
 
 		//Tries to eat mouse and changes hasEaten status on success
 		mouse = eatMouse(mouse,&hasEaten,snake->x,snake->y);
@@ -98,7 +101,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 		}
 
 		//Checks collision with rock
-		if(rockCollision(map,snake->x,snake->y)){
+		if(rockCollision(map.layout, snake->x, snake->y)){
 			decreaseSnake(snake);
 			if(score > 0){
 				score--;
@@ -106,7 +109,9 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 		}
 
 		//Checks collision with wall, itself or insufficient size
-		if(wallCollision(map,snake->x,snake->y) || snakeCollision(snake) || (getSnakeSize(snake) < 2)){
+		if(wallCollision(map.layout, snake->x, snake->y) 
+				|| snakeCollision(snake) 
+				|| (getSnakeSize(snake) < 2)){
 			isDead = 1;
 			--*lives;
 			if(*lives == 0){
@@ -128,14 +133,16 @@ int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, i
 		}
 			
 		//Draws screen
-		refreshScreen(snake,mouse,apple,map,mapWidth,mapHeight,lvl,score,*lives,miceEaten);
+		refreshScreen(snake, mouse, apple, map.layout, 
+					  map.size.width, map.size.height, 
+					  lvl, score, *lives, miceEaten);
 		
 		//Wait for next iteration
 		nanosleep(&wait,NULL);
 		
 	}while(!isDead);
 
-	destroyMap(map,mapHeight);
+	destroyMap(map);
 
 	//Destroy snake
 	destroySnake(snake);
