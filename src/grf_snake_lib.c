@@ -72,7 +72,7 @@ void destroySnake(Snake *head){
 }
 
 //Removes last element, puts new one in place of head and moves head in direction dir
-void moveSnake(Snake *head,int dir,int xSize,int ySize){
+void moveSnake(Snake *head, int dir, map_t map){
 	
 	if(dir == _RIGHT_ ||\
 	   dir == _LEFT_ ||\
@@ -84,22 +84,22 @@ void moveSnake(Snake *head,int dir,int xSize,int ySize){
 	
 	switch(dir){
 		case _RIGHT_:
-			head->x = (head->x + 1) % xSize;
+			head->x = (head->x + 1) % map.size.width;
 			break;
 		case _UP_:
 			head->y--;
 			if(head->y < 0){
-				head->y = ySize-1;
+				head->y = map.size.height-1;
 			}
 			break;
 		case _LEFT_:
 			head->x--;
 			if(head->x < 0){
-				head->x = xSize-1;
+				head->x = map.size.width-1;
 			}
 			break;
 		case _DOWN_:
-			head->y = (head->y + 1) % ySize;
+			head->y = (head->y + 1) % map.size.height;
 			break;
 	}
 }

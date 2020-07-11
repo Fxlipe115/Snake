@@ -1,21 +1,20 @@
-#include <stdlib.h>
-
-#include "grf_snake_lib.h"
 #include "grf_collisions_lib.h"
 
-int wallCollision(char** map, int x, int y){
+#include <stdlib.h>
+
+int wallCollision(map_t map, int x, int y){
 	int status = 0;
 
-	if(map[y][x] == '#'){
+	if(map.layout[y][x] == '#'){
 		status = 1;
 	}
 	return status;
 }
 
-int rockCollision(char** map, int x, int y){
+int rockCollision(map_t map, int x, int y){
 	int status = 0;
 
-	if(map[y][x] == '*'){
+	if(map.layout[y][x] == '*'){
 		status = 1;
 	}
 	return status;

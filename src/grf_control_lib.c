@@ -1,3 +1,5 @@
+#include "grf_control_lib.h"
+
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
@@ -6,7 +8,6 @@
 
 #include "grf_snake_lib.h"
 #include "hsb_mouse_lib.h"
-#include "grf_control_lib.h"
 #include "grf_draw_lib.h"
 #include "grf_scores_lib.h"
 #include "grf_collisions_lib.h"
@@ -14,6 +15,8 @@
 #include "map.h"
 
 #define LEVELS_NUMBER 7
+
+void getInitPos(map_t map,int* xpos,int* ypos);
 
 int startLevel(int lvl, int score, int snakeSize, int* lives, 
                int* isGameOver, int* levelFinished){
@@ -36,8 +39,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 
 	//Create snake
 	int xpos = 0,ypos = 0;
-	getInitPos(map.layout, map.size.width, 
-	           map.size.height, &xpos, &ypos);
+	getInitPos(map, &xpos, &ypos);
 	Snake *snake = newSnake(snakeSize,xpos,ypos);
 
 	//Create mouse list
@@ -64,15 +66,13 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 
 			//Food creation control
 			if(miceEaten < 10){
-				mouse = newMouse(mouse, map.layout, map.size.height, 
-				                 map.size.width, map.size.height*4, snake);
+				mouse = newMouse(mouse, map, map.size.height*4, snake);
 			}
 		}
 
 		if(miceEaten >= 10 && apple == NULL && !isDead){
 			mouse = destroyAllMice(mouse);
-			apple = newApple(map.layout, map.size.height, 
-							 map.size.width, snake);
+			apple = newApple(map, snake);
 		}
 
 
@@ -86,7 +86,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 		}
 
 		//Update snake position
-		moveSnake(snake, dir, map.size.width, map.size.height);
+		moveSnake(snake, dir, map);
 
 		//Tries to eat mouse and changes hasEaten status on success
 		mouse = eatMouse(mouse,&hasEaten,snake->x,snake->y);
@@ -101,7 +101,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 		}
 
 		//Checks collision with rock
-		if(rockCollision(map.layout, snake->x, snake->y)){
+		if(rockCollision(map, snake->x, snake->y)){
 			decreaseSnake(snake);
 			if(score > 0){
 				score--;
@@ -109,7 +109,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 		}
 
 		//Checks collision with wall, itself or insufficient size
-		if(wallCollision(map.layout, snake->x, snake->y) 
+		if(wallCollision(map, snake->x, snake->y) 
 				|| snakeCollision(snake) 
 				|| (getSnakeSize(snake) < 2)){
 			isDead = 1;
@@ -133,8 +133,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 		}
 			
 		//Draws screen
-		refreshScreen(snake, mouse, apple, map.layout, 
-					  map.size.width, map.size.height, 
+		refreshScreen(snake, mouse, apple, map, 
 					  lvl, score, *lives, miceEaten);
 		
 		//Wait for next iteration
@@ -280,10 +279,10 @@ void getPlayerData(int score){
 }
 
 //Gets initial x, y position given in the map
-void getInitPos(char** map,int width,int height,int* xpos,int* ypos){
-	for(int y = 0; y < height; y++){
-		for(int x = 0; x < width; x++){
-			if(map[y][x] == 'o'){
+void getInitPos(map_t map, int* xpos, int* ypos){
+	for(int y = 0; y < map.size.height; y++){
+		for(int x = 0; x < map.size.width; x++){
+			if(map.layout[y][x] == 'o'){
 				*xpos = x;
 				*ypos = y;
 			}

@@ -1,6 +1,8 @@
 #ifndef GRF_SNAKE_LIB_H
 # define GRF_SNAKE_LIB_H
 
+#include "map.h"
+
 //Direction macros for funtion moveSnake()
 #define _RIGHT_ 0
 #define _UP_ 90
@@ -24,7 +26,7 @@ void decreaseSnake(Snake *head);
 
 int getSnakeSize(Snake *head);
 
-void moveSnake(Snake *head,int dir,int xSize,int ySize);
+void moveSnake(Snake *head, int dir, map_t map);
 
 int isSnake(Snake *head,int x,int y);
 

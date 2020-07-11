@@ -5,8 +5,9 @@
 #include "hsb_mouse_lib.h"
 #include "hsb_apple_lib.h"
 #include "grf_scores_lib.h"
+#include "map.h"
 
-void refreshScreen(Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int lvl,int score,int lives,int miceEaten);
+void refreshScreen(Snake *snake,Mouse *mouse,Apple *apple,map_t map,int lvl,int score,int lives,int miceEaten);
 
 void drawMenu(int option);
 

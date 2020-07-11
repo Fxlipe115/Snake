@@ -5,7 +5,7 @@
 #include "draw.h"
 
 //Prints screen with all elements given in it
-void refreshScreen(Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixSize,int matrixySize,int lvl,int score,int lives,int miceEaten){
+void refreshScreen(Snake *snake, Mouse *mouse, Apple *apple, map_t map, int lvl, int score, int lives, int miceEaten){
     draw_initialize();
     move_cursor(0,0);
 
@@ -14,9 +14,9 @@ void refreshScreen(Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixS
     draw(COLOR_SCORE, "Level: %d | Score: %03d | Lives: %d | \
             ~>: %0d/10\n", lvl+1, score, lives, miceEaten);
 
-    for(int y = 0; y<matrixySize; y++){
-        for(int x = 0; x<matrixSize; x++){
-            if(map[y][x] == '#'){
+    for(int y = 0; y<map.size.height; y++){
+        for(int x = 0; x<map.size.width; x++){
+            if(map.layout[y][x] == '#'){
                 draw(COLOR_WALL, "  ");
             }else if(snake->y == y && snake->x == x){
                 draw(COLOR_HEAD, "00");
@@ -29,7 +29,7 @@ void refreshScreen(Snake *snake,Mouse *mouse,Apple *apple,char **map,int matrixS
             }else if(isApple(apple,x,y)){
                 draw(COLOR_LEAF, "~");
                 draw(COLOR_APPLE, "@");
-            }else if(map[y][x] == '*'){
+            }else if(map.layout[y][x] == '*'){
                 draw(COLOR_ROCK, "{}");
             }else{
                 draw(COLOR_MAP, "  ");

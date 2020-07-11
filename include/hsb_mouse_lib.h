@@ -2,6 +2,7 @@
 #define HSB_RATS_LIB 
 
 #include "grf_snake_lib.h"
+#include "map.h"
 
 typedef struct mouse{
 
@@ -18,7 +19,7 @@ Mouse* destroyLastMouse(Mouse* mouse);
 
 Mouse* eatMouse(Mouse* mouse,int *hasEaten,int x,int y);
 
-Mouse* newMouse(Mouse* mouselist, char** map, int height, int width, int time, Snake* snake);
+Mouse* newMouse(Mouse* mouselist, map_t map, int time, Snake* snake);
 
 
 Mouse* destroyAllMice(Mouse* mouse);

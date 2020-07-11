@@ -1,12 +1,13 @@
+#include "hsb_apple_lib.h"
+
 #include <stdlib.h>
 #include <math.h>
 
-#include "hsb_apple_lib.h"
 #include "grf_snake_lib.h"
 
 
 //Creates apple and randomically gives it a x,y position until it does not collide with anything on the map
-Apple* newApple(char** map, int height, int width, Snake* snake){
+Apple* newApple(map_t map, Snake* snake){
 	Apple* apple = malloc(sizeof(Apple));
 
 	int isValid = 1;
@@ -14,11 +15,11 @@ Apple* newApple(char** map, int height, int width, Snake* snake){
 	do{
 		isValid = 1;
 
-		apple->x = rand() % width;
-		apple->y = rand() % height;
+		apple->x = rand() % map.size.width;
+		apple->y = rand() % map.size.height;
 
-		if ((map[apple->y][apple->x] == '#') ||\
-			(map[apple->y][apple->x] == '*') ||\
+		if ((map.layout[apple->y][apple->x] == '#') ||\
+			(map.layout[apple->y][apple->x] == '*') ||\
 		      	isSnake(snake, apple->x, apple->y)){
 			
 			isValid = 0;

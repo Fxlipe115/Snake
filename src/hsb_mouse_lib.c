@@ -1,7 +1,8 @@
+#include "hsb_mouse_lib.h"
+
 #include <stdlib.h>
 
 #include "grf_snake_lib.h" 
-#include "hsb_mouse_lib.h"
 
 int isMouse(Mouse* mouse, int x, int y){
 	int isMouse = 0;
@@ -71,7 +72,7 @@ Mouse* eatMouse(Mouse* mouse,int* hasEaten,int x, int y){
 	return returnValue;
 }
 
-Mouse* newMouse(Mouse* mouselist, char** map, int height, int width, int time, Snake* snake){
+Mouse* newMouse(Mouse* mouselist, map_t map, int time, Snake* snake){
 	//create new node
 	Mouse *mouse = malloc(sizeof(Mouse));
 	//point to given list
@@ -86,12 +87,12 @@ Mouse* newMouse(Mouse* mouselist, char** map, int height, int width, int time, S
 		//flag
 		isValid = 1;
 		//ramdomly set (x,y) position to mouse
-		mouse->x = rand() % width;
-		mouse->y = rand() % height;
+		mouse->x = rand() % map.size.width;
+		mouse->y = rand() % map.size.height;
 		
 		//if position doesn't match anything already on the map
-		if ((map[mouse->y][mouse->x] == '#') ||\
-			(map[mouse->y][mouse->x] == '*') ||\
+		if ((map.layout[mouse->y][mouse->x] == '#') ||\
+			(map.layout[mouse->y][mouse->x] == '*') ||\
 		      	isSnake(snake, mouse->x, mouse->y)){
 		//       	isMouse(mouselist, mouse->x, mouse->y)){
 			
