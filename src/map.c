@@ -47,3 +47,16 @@ void destroyMap(map_t map){
     }
     free(map.layout);
 }
+
+position_t map_initial_position(map_t map){
+	position_t position;
+	for(int y = 0; y < map.size.height; y++){
+		for(int x = 0; x < map.size.width; x++){
+			if(map.layout[y][x] == 'o'){
+				position.x = x;
+				position.y = y;
+			}
+		}
+	}
+	return position;
+}

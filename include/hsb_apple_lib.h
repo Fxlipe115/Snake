@@ -4,14 +4,15 @@
 #include "grf_snake_lib.h"
 #include "map.h"
 
-typedef struct apple{
+struct apple {
 	int x;
 	int y;
-}Apple;
+} ;
+typedef struct apple Apple;
 
-Apple* newApple(map_t map, Snake* snake);
+Apple* newApple(map_t map, snake_t* snake);
 
-int eatApple(Apple* apple, int x, int y);
+int eatApple(Apple* apple, snake_t* snake);
 
 int isApple(Apple* apple, int x, int y);
 

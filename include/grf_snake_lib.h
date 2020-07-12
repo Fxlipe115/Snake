@@ -2,6 +2,7 @@
 # define GRF_SNAKE_LIB_H
 
 #include "map.h"
+#include "position.h"
 
 //Direction macros for funtion moveSnake()
 #define _RIGHT_ 0
@@ -9,27 +10,36 @@
 #define _LEFT_ 180
 #define _DOWN_ 270
 
-typedef struct snake{
-	int x;
-	int y;
+typedef struct snake_body {
+	position_t position;
 	int food;
-	struct snake *next;
-} Snake;
+	struct snake_body *next;
+} snake_body_t;
 
-Snake* newSnake(int size,int x,int y);
+typedef struct snake {
+	snake_body_t* head;
+	int size;
+	int direction;
+} snake_t;
 
-void destroySnake(Snake *head);
 
-void increaseSnake(Snake *head,int food);
 
-void decreaseSnake(Snake *head);
+snake_t* newSnake(int size, position_t position);
 
-int getSnakeSize(Snake *head);
+void destroySnake(snake_t* snake);
 
-void moveSnake(Snake *head, int dir, map_t map);
+void increaseSnake(snake_t* snake, int food);
 
-int isSnake(Snake *head,int x,int y);
+void decreaseSnake(snake_t* snake);
 
-int hasFood(Snake *head,int x,int y);
+int getSnakeSize(snake_t* snake);
+
+void moveSnake(snake_t* snake, int dir, map_t map);
+
+int isSnake(snake_t* snake, position_t position);
+
+int is_snake_head(snake_t* snake, position_t position);
+
+int hasFood(snake_t* snake, position_t position);
 
 #endif

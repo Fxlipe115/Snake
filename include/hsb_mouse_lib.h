@@ -17,9 +17,9 @@ int isMouse(Mouse* mouse, int x, int y);
 
 Mouse* destroyLastMouse(Mouse* mouse);
 
-Mouse* eatMouse(Mouse* mouse,int *hasEaten,int x,int y);
+Mouse* eatMouse(Mouse* mouse, int *hasEaten, snake_t* snake);
 
-Mouse* newMouse(Mouse* mouselist, map_t map, int time, Snake* snake);
+Mouse* newMouse(Mouse* mouselist, map_t map, int time, snake_t* snake);
 
 
 Mouse* destroyAllMice(Mouse* mouse);

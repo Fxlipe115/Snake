@@ -13,13 +13,11 @@
 #include "grf_collisions_lib.h"
 #include "control.h"
 #include "map.h"
+#include "position.h"
 
 #define LEVELS_NUMBER 7
 
-void getInitPos(map_t map,int* xpos,int* ypos);
-
-int startLevel(int lvl, int score, int snakeSize, int* lives, 
-               int* isGameOver, int* levelFinished){
+int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, int* levelFinished){
 	//Initial direction of snake
 	int dir = _RIGHT_;
 
@@ -38,9 +36,8 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 	map_t map = loadMap(mapfile);
 
 	//Create snake
-	int xpos = 0,ypos = 0;
-	getInitPos(map, &xpos, &ypos);
-	Snake *snake = newSnake(snakeSize,xpos,ypos);
+	position_t position = map_initial_position(map);
+	snake_t* snake = newSnake(snakeSize, position);
 
 	//Create mouse list
 	Mouse *mouse = NULL;
@@ -89,7 +86,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 		moveSnake(snake, dir, map);
 
 		//Tries to eat mouse and changes hasEaten status on success
-		mouse = eatMouse(mouse,&hasEaten,snake->x,snake->y);
+		mouse = eatMouse(mouse, &hasEaten, snake);
 		//Destroy one mouse when its time is 0
 		mouse = destroyLastMouse(mouse);
 
@@ -101,7 +98,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 		}
 
 		//Checks collision with rock
-		if(rockCollision(map, snake->x, snake->y)){
+		if(rockCollision(map, snake)){
 			decreaseSnake(snake);
 			if(score > 0){
 				score--;
@@ -109,9 +106,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 		}
 
 		//Checks collision with wall, itself or insufficient size
-		if(wallCollision(map, snake->x, snake->y) 
-				|| snakeCollision(snake) 
-				|| (getSnakeSize(snake) < 2)){
+		if(wallCollision(map, snake) || snakeCollision(snake) || (getSnakeSize(snake) < 2)){
 			isDead = 1;
 			--*lives;
 			if(*lives == 0){
@@ -125,7 +120,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 		}
 
 		//If snake ate the apple
-		if(eatApple(apple,snake->x,snake->y)){
+		if(eatApple(apple, snake)){
 			//End level
 			score += 10;
 			isDead = 1;
@@ -133,8 +128,7 @@ int startLevel(int lvl, int score, int snakeSize, int* lives,
 		}
 			
 		//Draws screen
-		refreshScreen(snake, mouse, apple, map, 
-					  lvl, score, *lives, miceEaten);
+		refreshScreen(snake, mouse, apple, map, lvl, score, *lives, miceEaten);
 		
 		//Wait for next iteration
 		nanosleep(&wait,NULL);
@@ -276,18 +270,6 @@ void getPlayerData(int score){
 	int isHighscore = updateScore(player);
 
 	scoreScreen(isHighscore);
-}
-
-//Gets initial x, y position given in the map
-void getInitPos(map_t map, int* xpos, int* ypos){
-	for(int y = 0; y < map.size.height; y++){
-		for(int x = 0; x < map.size.width; x++){
-			if(map.layout[y][x] == 'o'){
-				*xpos = x;
-				*ypos = y;
-			}
-		}
-	}
 }
 
 //Draws choose level menu and calls the level selected

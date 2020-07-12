@@ -7,7 +7,7 @@
 #include "grf_scores_lib.h"
 #include "map.h"
 
-void refreshScreen(Snake *snake,Mouse *mouse,Apple *apple,map_t map,int lvl,int score,int lives,int miceEaten);
+void refreshScreen(snake_t *snake,Mouse *mouse,Apple *apple,map_t map,int lvl,int score,int lives,int miceEaten);
 
 void drawMenu(int option);
 

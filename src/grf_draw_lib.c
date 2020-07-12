@@ -5,7 +5,7 @@
 #include "draw.h"
 
 //Prints screen with all elements given in it
-void refreshScreen(Snake *snake, Mouse *mouse, Apple *apple, map_t map, int lvl, int score, int lives, int miceEaten){
+void refreshScreen(snake_t *snake, Mouse *mouse, Apple *apple, map_t map, int lvl, int score, int lives, int miceEaten){
     draw_initialize();
     move_cursor(0,0);
 
@@ -16,13 +16,14 @@ void refreshScreen(Snake *snake, Mouse *mouse, Apple *apple, map_t map, int lvl,
 
     for(int y = 0; y<map.size.height; y++){
         for(int x = 0; x<map.size.width; x++){
+            position_t current_position = {x, y};
             if(map.layout[y][x] == '#'){
                 draw(COLOR_WALL, "  ");
-            }else if(snake->y == y && snake->x == x){
+            }else if(is_snake_head(snake, current_position)){
                 draw(COLOR_HEAD, "00");
-            }else if(hasFood(snake,x,y)){
+            }else if(hasFood(snake, current_position)){
                 draw(COLOR_FOOD_EATEN, "()");
-            }else if(isSnake(snake,x,y)){
+            }else if(isSnake(snake, current_position)){
                 draw(COLOR_BODY, "  ");
             }else if(isMouse(mouse,x,y)){
                 draw(COLOR_MOUSE, "~>");

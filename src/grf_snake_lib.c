@@ -1,137 +1,145 @@
-#include <stdlib.h>
-
 #include "grf_snake_lib.h"
 
+#include <stdlib.h>
 
 //Returns size of snake
-int getSnakeSize(Snake *head){
-	int size = 0;
-	while(head != NULL){
-		size++;
-		head = head->next;
-	}
-	return size;
-}
-
-//Increase snake by 1, putting 0 or 1 on food attribute
-void increaseSnake(Snake *head,int food){
-	Snake *newbody = malloc(sizeof(Snake));
-	
-	newbody->x = head->x;
-	newbody->y = head->y;
-	newbody->food = food;
-	
-	newbody->next = head->next;
-	head->next = newbody;
-}
-
-//Removes the last element from snake
-void decreaseSnake(Snake *head){
-	if(getSnakeSize(head) > 1){
-		Snake* snake = head->next;
-;
-		while(snake->next != NULL){
-			head = head->next;
-			snake = head->next;
-		}
-		free(snake);
-		head->next = NULL;
-	}   
+int getSnakeSize(snake_t* snake){
+	return snake->size;
 }
 
 //Creates snake of size "size" on position x,y
-Snake* newSnake(int size,int x,int y){
-	Snake *head = malloc(sizeof(Snake));
-	head->x = x;
-	head->y = y;
+snake_t* newSnake(int size, position_t position){
+	snake_t* snake = malloc(sizeof(snake_t));
+	snake->size = 0;
+
+	snake_body_t* head = malloc(sizeof(snake_body_t));
+	head->position.x = position.x;
+	head->position.y = position.y;
 	head->food = 0;
+	snake->size++;
 
-	Snake *tail = malloc(sizeof(Snake));
-	tail->x = x;
-	tail->y = y;
+	snake_body_t* tail = malloc(sizeof(snake_body_t));
+	tail->position.x = position.x;
+	tail->position.y = position.y;
 	tail->food = 0;
+	snake->size++;
 
+	snake->head = head;
 	head->next = tail;
 	tail->next = NULL;
 	size -= 2;
 
 	for(int i = 0; i<size; i++){
-		increaseSnake(head,0);
+		increaseSnake(snake,0);
 	}
 
-	return head;
+	return snake;
+}
+
+//Increase snake by 1, putting 0 or 1 on food attribute
+void increaseSnake(snake_t* snake, int food){
+	snake_body_t* head = snake->head;
+	snake_body_t* newbody = malloc(sizeof(snake_body_t));
+	
+	newbody->position.x = head->position.x;
+	newbody->position.y = head->position.y;
+	newbody->food = food;
+	
+	newbody->next = head->next;
+	head->next = newbody;
+
+	snake->size++;
+}
+
+//Removes the last element from snake
+void decreaseSnake(snake_t *snake){
+	if(getSnakeSize(snake) > 1){
+		snake_body_t* body = snake->head;
+		snake_body_t* tail = snake->head->next;
+
+		while(tail->next != NULL){
+			body = body->next;
+			tail = tail->next;
+		}
+		free(tail);
+		body->next = NULL;
+
+		snake->size--;
+	}
 }
 
 //Frees all memory associated with snake
-void destroySnake(Snake *head){
+void destroySnake(snake_t* snake){
+	snake_body_t* head = snake->head;
 	while(head != NULL){
-		Snake *tmp = head;
+		snake_body_t* tmp = head;
 		head = head->next;
 		free(tmp);
 	}
+	snake->size = 0;
 }
 
 //Removes last element, puts new one in place of head and moves head in direction dir
-void moveSnake(Snake *head, int dir, map_t map){
+void moveSnake(snake_t* snake, int dir, map_t map){
 	
 	if(dir == _RIGHT_ ||\
 	   dir == _LEFT_ ||\
 	   dir == _UP_ ||\
 	   dir == _DOWN_){
-		decreaseSnake(head);
-		increaseSnake(head,0);
+		decreaseSnake(snake);
+		increaseSnake(snake, 0);
 	}
 	
 	switch(dir){
 		case _RIGHT_:
-			head->x = (head->x + 1) % map.size.width;
+			snake->head->position.x = (snake->head->position.x + 1) % map.size.width;
 			break;
 		case _UP_:
-			head->y--;
-			if(head->y < 0){
-				head->y = map.size.height-1;
+			snake->head->position.y--;
+			if(snake->head->position.y < 0){
+				snake->head->position.y = map.size.height-1;
 			}
 			break;
 		case _LEFT_:
-			head->x--;
-			if(head->x < 0){
-				head->x = map.size.width-1;
+			snake->head->position.x--;
+			if(snake->head->position.x < 0){
+				snake->head->position.x = map.size.width-1;
 			}
 			break;
 		case _DOWN_:
-			head->y = (head->y + 1) % map.size.height;
+			snake->head->position.y = (snake->head->position.y + 1) % map.size.height;
 			break;
 	}
 }
 
 //Returns true if position x,y coincides with any snake part
-int isSnake(Snake *head,int x,int y){
+int isSnake(snake_t* snake, position_t position){
 	int isSnake = 0;
-
-	while(head != NULL && isSnake == 0){
-
-		int position = ((head->x == x) && (head->y == y));
-
-		if(position){
+	snake_body_t* body = snake->head;
+	while(body != NULL && isSnake == 0){
+		if(is_same_position(body->position, position)){
 			isSnake = 1;
 		}
-		head = head->next;
+		body = body->next;
 	}
 	return isSnake;
 }
 
+int is_snake_head(snake_t* snake, position_t position){
+	position_t head_position = snake->head->position;
+	return is_same_position(head_position, position);
+}
+
 //Returns true if snake part located on x,y has attribute food = 1
-int hasFood(Snake *head,int x,int y){
+int hasFood(snake_t* snake, position_t position){
+	snake_body_t* body = snake->head;
 	int hasFood = 0;
 
-	while(head != NULL){
-
-		int position = ((head->x == x) && (head->y == y));
-
-		if(position && head->food){
+	while(body != NULL){
+		if(is_same_position(body->position, position) && body->food){
 			hasFood = 1;
 		}
-		head = head->next;
+		body = body->next;
 	}
 	return hasFood;
 }

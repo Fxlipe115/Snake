@@ -54,25 +54,26 @@ Mouse* destroyLastMouse(Mouse* mouse){
 	return mouse;
 }
 
-Mouse* eatMouse(Mouse* mouse,int* hasEaten,int x, int y){
+Mouse* eatMouse(Mouse* mouse, int* hasEaten, snake_t* snake){
 	Mouse *next = NULL, *returnValue = NULL;
 
 	if(mouse == NULL){
 		returnValue = NULL;
-	}else if(mouse->x == x && mouse->y == y){
+	}else if(mouse->x == snake->head->position.x &&
+			mouse->y == snake->head->position.y){
 		next = mouse->next;
 		free(mouse);
 		*hasEaten = 1;
 		returnValue = next;
 	}else{
-		mouse->next = eatMouse(mouse->next,hasEaten,x,y);
+		mouse->next = eatMouse(mouse->next, hasEaten, snake);
 		returnValue = mouse;
 	}
 
 	return returnValue;
 }
 
-Mouse* newMouse(Mouse* mouselist, map_t map, int time, Snake* snake){
+Mouse* newMouse(Mouse* mouselist, map_t map, int time, snake_t* snake){
 	//create new node
 	Mouse *mouse = malloc(sizeof(Mouse));
 	//point to given list
@@ -90,10 +91,11 @@ Mouse* newMouse(Mouse* mouselist, map_t map, int time, Snake* snake){
 		mouse->x = rand() % map.size.width;
 		mouse->y = rand() % map.size.height;
 		
+		position_t mouse_position = {mouse->x, mouse->y};
 		//if position doesn't match anything already on the map
 		if ((map.layout[mouse->y][mouse->x] == '#') ||\
 			(map.layout[mouse->y][mouse->x] == '*') ||\
-		      	isSnake(snake, mouse->x, mouse->y)){
+		      	isSnake(snake, mouse_position)){
 		//       	isMouse(mouselist, mouse->x, mouse->y)){
 			
 			isValid = 0;

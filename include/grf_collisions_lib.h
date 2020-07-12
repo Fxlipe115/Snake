@@ -4,10 +4,10 @@
 #include "grf_snake_lib.h"
 #include "map.h"
 
-int wallCollision(map_t map, int x, int y);
+int wallCollision(map_t map, snake_t* snake);
 
-int rockCollision(map_t map, int x, int y);
+int rockCollision(map_t map, snake_t* snake);
 
-int snakeCollision(Snake* snake);
+int snakeCollision(snake_t* snake);
 
 #endif
