@@ -11,6 +11,9 @@ int getSnakeSize(snake_t* snake){
 snake_t* newSnake(int size, position_t position){
 	snake_t* snake = malloc(sizeof(snake_t));
 	snake->size = 0;
+	snake->direction = _RIGHT_;
+	snake->mice_eaten = 0;
+	snake->alive = true;
 
 	snake_body_t* head = malloc(sizeof(snake_body_t));
 	head->position.x = position.x;

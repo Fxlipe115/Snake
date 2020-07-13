@@ -5,19 +5,29 @@
 #include "draw.h"
 
 //Prints screen with all elements given in it
-void refreshScreen(snake_t *snake, Mouse *mouse, Apple *apple, map_t map, int lvl, int score, int lives, int miceEaten){
+void refreshScreen(game_t* game){
+    level_t* current_level = game->current_level;
+    map_t* map = current_level->map;
+    snake_t* snake = current_level->snake;
+    mouse_list_t* mouse_list = current_level->mouse_list;
+    Apple* apple = current_level->apple;
+    int level_number = current_level->number;
+    int total_score = game->score + current_level->score;
+    int lives = game->lives;
+    int mice_eaten = current_level->snake->mice_eaten;
+
     draw_initialize();
     move_cursor(0,0);
 
     set_background_color(COLOR_BACKGROUND);
 
     draw(COLOR_SCORE, "Level: %d | Score: %03d | Lives: %d | \
-            ~>: %0d/10\n", lvl+1, score, lives, miceEaten);
+            ~>: %0d/10\n", level_number+1, total_score, lives, mice_eaten);
 
-    for(int y = 0; y<map.size.height; y++){
-        for(int x = 0; x<map.size.width; x++){
+    for(int y = 0; y < map->size.height; y++){
+        for(int x = 0; x < map->size.width; x++){
             position_t current_position = {x, y};
-            if(map.layout[y][x] == '#'){
+            if(is_wall_at(current_position, map)){
                 draw(COLOR_WALL, "  ");
             }else if(is_snake_head(snake, current_position)){
                 draw(COLOR_HEAD, "00");
@@ -25,12 +35,12 @@ void refreshScreen(snake_t *snake, Mouse *mouse, Apple *apple, map_t map, int lv
                 draw(COLOR_FOOD_EATEN, "()");
             }else if(isSnake(snake, current_position)){
                 draw(COLOR_BODY, "  ");
-            }else if(isMouse(mouse,x,y)){
+            }else if(is_mouse_at(current_position, mouse_list)){
                 draw(COLOR_MOUSE, "~>");
             }else if(isApple(apple,x,y)){
                 draw(COLOR_LEAF, "~");
                 draw(COLOR_APPLE, "@");
-            }else if(map.layout[y][x] == '*'){
+            }else if(is_rock_at(current_position, map)){
                 draw(COLOR_ROCK, "{}");
             }else{
                 draw(COLOR_MAP, "  ");

@@ -1,17 +1,19 @@
 #ifndef GRF_CONTROL_LIB
 #	define GRF_CONTROL_LIB
 
+#include "level.h"
+
 #define KEY_ESC 27
 
-int startLevel(int lvl,int score,int snakeSize,int* lives,int* isGameOver,int* levelFinished);
+int startLevel(level_t* level);
 
 void startMenu();
 
 void menuControl();
 
-int gameControl(int dir,int* isPaused);
+int levelControl(int dir);
 
-void levelControl();
+void gameControl();
 
 void getPlayerData(int score);
 

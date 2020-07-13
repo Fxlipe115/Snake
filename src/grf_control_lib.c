@@ -14,134 +14,9 @@
 #include "control.h"
 #include "map.h"
 #include "position.h"
+#include "game.h"
 
 #define LEVELS_NUMBER 7
-
-int startLevel(int lvl, int score, int snakeSize, int* lives, int* isGameOver, int* levelFinished){
-	//Initial direction of snake
-	int dir = _RIGHT_;
-
-	//Pause between iteractions
-	struct timespec wait;
-	wait.tv_sec = 0;
-	wait.tv_nsec = 999999999L;
-
-	//Number of iteraction for mouse creation control
-	unsigned int iteraction = 0;
-
-	//Map loading
-	char mapfile[13];
-	sprintf(mapfile,"maps/%d.txt",lvl);
-
-	map_t map = loadMap(mapfile);
-
-	//Create snake
-	position_t position = map_initial_position(map);
-	snake_t* snake = newSnake(snakeSize, position);
-
-	//Create mouse list
-	Mouse *mouse = NULL;
-
-	//Apple for the end of the level
-	Apple *apple = NULL;
-
-	//Number of mice eaten
-	int miceEaten = 0;
-
-	//Flags
-	int isDead = 0;
-	int isPaused = 0;
-	
-	//Game loop
-	do{
-		int hasEaten = 0;
-
-		iteraction++;
-		if(iteraction % map.size.height == 0){
-			//Game speed control
-			wait.tv_nsec = ((wait.tv_nsec - 70000000) * .95) + 70000000;
-
-			//Food creation control
-			if(miceEaten < 10){
-				mouse = newMouse(mouse, map, map.size.height*4, snake);
-			}
-		}
-
-		if(miceEaten >= 10 && apple == NULL && !isDead){
-			mouse = destroyAllMice(mouse);
-			apple = newApple(map, snake);
-		}
-
-
-		dir = gameControl(dir,&isPaused);
-
-		//Pause
-		if(isPaused){
-            wait_for_key_press();
-			isPaused = 0;
-			continue;
-		}
-
-		//Update snake position
-		moveSnake(snake, dir, map);
-
-		//Tries to eat mouse and changes hasEaten status on success
-		mouse = eatMouse(mouse, &hasEaten, snake);
-		//Destroy one mouse when its time is 0
-		mouse = destroyLastMouse(mouse);
-
-		//Increase snake size and update status
-		if(hasEaten){
-			increaseSnake(snake,1);
-			score += (lvl+1);
-			miceEaten++;
-		}
-
-		//Checks collision with rock
-		if(rockCollision(map, snake)){
-			decreaseSnake(snake);
-			if(score > 0){
-				score--;
-			}
-		}
-
-		//Checks collision with wall, itself or insufficient size
-		if(wallCollision(map, snake) || snakeCollision(snake) || (getSnakeSize(snake) < 2)){
-			isDead = 1;
-			--*lives;
-			if(*lives == 0){
-				*isGameOver = 1;
-			}
-		}
-
-		if(dir == 'Q'){
-			isDead = 1;
-			*isGameOver = 1;
-		}
-
-		//If snake ate the apple
-		if(eatApple(apple, snake)){
-			//End level
-			score += 10;
-			isDead = 1;
-			*levelFinished = 1;
-		}
-			
-		//Draws screen
-		refreshScreen(snake, mouse, apple, map, lvl, score, *lives, miceEaten);
-		
-		//Wait for next iteration
-		nanosleep(&wait,NULL);
-		
-	}while(!isDead);
-
-	destroyMap(map);
-
-	//Destroy snake
-	destroySnake(snake);
-	
-	return score;
-}
 
 //Receives input, changes the current option and sends it to drawMenu function
 void menuControl(){
@@ -173,7 +48,7 @@ void menuControl(){
 				switch(option){
 					//New Game
 					case 0:
-						levelControl();
+						gameControl();
 						break;
 					//Select Level
 					case 1:
@@ -199,7 +74,7 @@ void menuControl(){
 	}while(!exit);
 }
 
-int gameControl(int dir,int* isPaused){
+int levelControl(int dir){
 	int key = get_key_non_blocking();
 	
 	//Case it's a direction key, evaluates if diretion is valid
@@ -227,9 +102,6 @@ int gameControl(int dir,int* isPaused){
 					dir = _RIGHT_;
 				}
 				break;
-			case K_PAUSE:
-				*isPaused = 1;
-				break;
 			case K_QUIT:
 			case K_ESC:
 				dir = 'Q';
@@ -239,24 +111,31 @@ int gameControl(int dir,int* isPaused){
 	return dir;
 }
 
-void levelControl(){
+void gameControl(){
+	struct timespec wait;
+	wait.tv_sec = 0;
+	wait.tv_nsec = 999999999L;
 	int curlevel = 0;
-	int isGameOver = 0;
-	int lives = 3;
-	int score = 0;
 
-	//This while makes the player advance one level case he beat the last one
-	while(curlevel < LEVELS_NUMBER && !isGameOver){
-		int levelFinished = 0;
+	game_t* game = new_game();
 
-		//This one returns to the same level until game over if the player dies
-		while(!isGameOver && !levelFinished){
-			score = startLevel(curlevel,score,5,&lives,&isGameOver,&levelFinished);
+	game->current_level = new_level(curlevel);
+
+		//This while makes the player advance one level case he beat the last one
+	while(!game->game_over && !game->current_level->win){
+		game->current_level->snake->direction = levelControl(game->current_level->snake->direction);
+
+		update_game_state(game);
+
+		if(game->paused){
+			wait_for_key_press();
+			game->paused = false;
 		}
-	
-		curlevel++;
+
+		refreshScreen(game);
+		nanosleep(&wait,NULL);
 	}
-	getPlayerData(score);
+	getPlayerData(game->score);
 }
 
 //Gets player name and score and send it to update score function, then calls the highscores screen
@@ -276,9 +155,6 @@ void getPlayerData(int score){
 void chooseLevel(){
 	int level = 0;
 	int exit = 0;
-	int lives = 1;
-	int isGameOver = 0;
-	int levelFinished = 0;
 
 	do{
 		level_selection_screen(level, LEVELS_NUMBER);
@@ -300,8 +176,7 @@ void chooseLevel(){
 				}
 				break;
 			case K_ENTER:
-				lives = 1;
-				startLevel(level,0,5,&lives,&isGameOver,&levelFinished);
+				//startLevel(new_level(level));
 				break;
 			case K_ESC:
 				exit = 1;

@@ -1,13 +1,20 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "map.h"
+#include <stdbool.h>
+
+#include "level.h"
 
 typedef struct game {
     int score;
-    map_t map;
+    int lives;
+    bool paused;
+    bool game_over;
+    level_t* current_level;
 } game_t;
 
-game_t create_game(map_t map);
+game_t* new_game(void);
+
+void update_game_state(game_t* game);
 
 #endif

@@ -1,6 +1,8 @@
 #ifndef GRF_SNAKE_LIB_H
 # define GRF_SNAKE_LIB_H
 
+#include <stdbool.h>
+
 #include "map.h"
 #include "position.h"
 
@@ -20,6 +22,8 @@ typedef struct snake {
 	snake_body_t* head;
 	int size;
 	int direction;
+	int mice_eaten;
+	bool alive;
 } snake_t;
 
 
