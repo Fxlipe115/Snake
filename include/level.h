@@ -16,7 +16,7 @@ typedef struct level {
     map_t* map;
     snake_t* snake;
     mouse_list_t* mouse_list;
-    Apple* apple;
+    apple_t* apple;
 } level_t;
 
 level_t* new_level(int number);

@@ -45,7 +45,7 @@ bool snake_mouse_collision(snake_t* snake, mouse_list_t* mouse_list){
 	return is_mouse_at(snake->head->position, mouse_list);
 }
 
-bool snake_apple_collision(snake_t* snake, Apple* apple){
+bool snake_apple_collision(snake_t* snake, apple_t* apple){
 	return false;
 }
 

@@ -10,7 +10,7 @@ void refreshScreen(game_t* game){
     map_t* map = current_level->map;
     snake_t* snake = current_level->snake;
     mouse_list_t* mouse_list = current_level->mouse_list;
-    Apple* apple = current_level->apple;
+    apple_t* apple = current_level->apple;
     int level_number = current_level->number;
     int total_score = game->score + current_level->score;
     int lives = game->lives;
@@ -37,7 +37,7 @@ void refreshScreen(game_t* game){
                 draw(COLOR_BODY, "  ");
             }else if(is_mouse_at(current_position, mouse_list)){
                 draw(COLOR_MOUSE, "~>");
-            }else if(isApple(apple,x,y)){
+            }else if(is_apple_at(apple, current_position)){
                 draw(COLOR_LEAF, "~");
                 draw(COLOR_APPLE, "@");
             }else if(is_rock_at(current_position, map)){

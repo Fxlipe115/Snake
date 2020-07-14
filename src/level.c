@@ -45,6 +45,7 @@ void reset_snake(level_t* level){
 void destruct_level(level_t* level){
     destroyMap(level->map);
 	destroy_snake(level->snake);
+    destroy_apple(level->apple);
 }
 
 void update_level_state(level_t* level){
@@ -58,7 +59,8 @@ void update_level_state(level_t* level){
 
     if(level->snake->mice_eaten >= 10 && level->apple == NULL && level->snake->alive){
         clear_mouse_list(level->mouse_list);
-        level->apple = newApple(*level->map, level->snake);
+        position_t free_position = get_random_free_position(level);
+        level->apple = new_apple(free_position);
     }    
 
     //Update snake position
@@ -94,9 +96,7 @@ void update_level_state(level_t* level){
         level->snake->alive = false;
     }
 
-    //If snake ate the apple
-    if(eatApple(level->apple, level->snake)){
-        //End level
+    if(snake_apple_collision(level->snake, level->apple)){
         level->score += 10;
         level->win = true;
     }

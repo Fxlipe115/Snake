@@ -1,19 +1,18 @@
 #ifndef HSB_APPLE_LIB
 #	define HSB_APPLE_LIB
 
-#include "grf_snake_lib.h"
-#include "map.h"
+#include <stdbool.h>
 
-struct apple {
-	int x;
-	int y;
-} ;
-typedef struct apple Apple;
+#include "position.h"
 
-Apple* newApple(map_t map, snake_t* snake);
+typedef struct apple {
+	position_t position;
+} apple_t;
 
-int eatApple(Apple* apple, snake_t* snake);
+apple_t* new_apple(position_t position);
 
-int isApple(Apple* apple, int x, int y);
+void destroy_apple(apple_t* apple);
+
+bool is_apple_at(apple_t* apple, position_t position);
 
 #endif

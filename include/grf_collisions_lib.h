@@ -15,7 +15,7 @@ bool snake_snake_collision(snake_t* snake);
 
 bool snake_mouse_collision(snake_t* snake, mouse_list_t* mouse_list);
 
-bool snake_apple_collision(snake_t* snake, Apple* apple);
+bool snake_apple_collision(snake_t* snake, apple_t* apple);
 
 position_t get_random_free_position(level_t* level);
 
