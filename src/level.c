@@ -35,16 +35,16 @@ void initialize_map(level_t* level){
 
 void reset_snake(level_t* level){
     if(level->snake != NULL){
-        destroySnake(level->snake);
+        destroy_snake(level->snake);
     }
     const int initial_length = 5;
     position_t initial_position = map_initial_position(level->map);
-    level->snake = newSnake(initial_length, initial_position);
+    level->snake = new_snake(initial_length, initial_position);
 }
 
 void destruct_level(level_t* level){
     destroyMap(level->map);
-	destroySnake(level->snake);
+	destroy_snake(level->snake);
 }
 
 void update_level_state(level_t* level){
@@ -62,10 +62,10 @@ void update_level_state(level_t* level){
     }    
 
     //Update snake position
-    moveSnake(level->snake, level->snake->direction, *level->map);
+    move_snake(level->snake, level->map->size);
 
     if(snake_mouse_collision(level->snake, level->mouse_list)){
-        increaseSnake(level->snake, 1);
+        snake_eat(level->snake);
         destroy_mouse_at(level->mouse_list, level->snake->head->position);
         level->score += (level->number+1);
         level->snake->mice_eaten++;
@@ -76,8 +76,8 @@ void update_level_state(level_t* level){
     //level->mice = destroyLastMouse(level->mice);
 
     if(snake_rock_collision(level->snake, level->map)){
-        decreaseSnake(level->snake);
-        if(getSnakeSize(level->snake) < 2){
+        decrease_snake(level->snake);
+        if(level->snake->size < 2){
             level->snake->alive = false;
         }
 

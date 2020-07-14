@@ -21,7 +21,7 @@ Apple* newApple(map_t map, snake_t* snake){
 		position_t apple_position = {apple->x, apple->y};
 		if ((map.layout[apple->y][apple->x] == '#') ||\
 			(map.layout[apple->y][apple->x] == '*') ||\
-		      	isSnake(snake, apple_position)){
+		      	is_snake_at(snake, apple_position)){
 			
 			isValid = 0;
 		}

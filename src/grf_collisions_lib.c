@@ -31,7 +31,7 @@ bool snake_snake_collision(snake_t* snake){
 }
 
 bool snake_can_colide_with_itself(snake_t* snake){
-	return getSnakeSize(snake) > 4;
+	return snake->size > 4;
 }
 
 snake_body_t* ignore_beginning_of_body(snake_t* snake){

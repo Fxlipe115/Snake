@@ -14,7 +14,7 @@
 
 typedef struct snake_body {
 	position_t position;
-	int food;
+	bool has_food;
 	struct snake_body *next;
 } snake_body_t;
 
@@ -26,24 +26,20 @@ typedef struct snake {
 	bool alive;
 } snake_t;
 
+snake_t* new_snake(int size, position_t position);
 
+void destroy_snake(snake_t* snake);
 
-snake_t* newSnake(int size, position_t position);
+void snake_eat(snake_t* snake);
 
-void destroySnake(snake_t* snake);
+void decrease_snake(snake_t* snake);
 
-void increaseSnake(snake_t* snake, int food);
+void move_snake(snake_t* snake, map_size_t map_size);
 
-void decreaseSnake(snake_t* snake);
+bool is_snake_at(snake_t* snake, position_t position);
 
-int getSnakeSize(snake_t* snake);
+bool is_snake_head_at(snake_t* snake, position_t position);
 
-void moveSnake(snake_t* snake, int dir, map_t map);
-
-int isSnake(snake_t* snake, position_t position);
-
-int is_snake_head(snake_t* snake, position_t position);
-
-int hasFood(snake_t* snake, position_t position);
+bool has_food_at(snake_t* snake, position_t position);
 
 #endif

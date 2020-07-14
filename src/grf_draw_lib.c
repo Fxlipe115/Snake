@@ -29,11 +29,11 @@ void refreshScreen(game_t* game){
             position_t current_position = {x, y};
             if(is_wall_at(current_position, map)){
                 draw(COLOR_WALL, "  ");
-            }else if(is_snake_head(snake, current_position)){
+            }else if(is_snake_head_at(snake, current_position)){
                 draw(COLOR_HEAD, "00");
-            }else if(hasFood(snake, current_position)){
+            }else if(has_food_at(snake, current_position)){
                 draw(COLOR_FOOD_EATEN, "()");
-            }else if(isSnake(snake, current_position)){
+            }else if(is_snake_at(snake, current_position)){
                 draw(COLOR_BODY, "  ");
             }else if(is_mouse_at(current_position, mouse_list)){
                 draw(COLOR_MOUSE, "~>");
